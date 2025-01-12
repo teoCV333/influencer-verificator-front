@@ -1,0 +1,142 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.profile-header img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+}
+.profile-header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+.profile-header p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #8b949e;
+}
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+.tag {
+    background-color: #21262d;
+    color: #8b949e;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin: 5px;
+    font-size: 12px;
+}
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.stat {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    flex: 1;
+    margin: 0 10px;
+}
+.stat h2 {
+    font-size: 24px;
+    margin: 0;
+}
+.stat p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #8b949e;
+}
+.nav-tabs {
+    display: flex;
+    border-bottom: 1px solid #30363d;
+    margin-bottom: 20px;
+}
+.nav-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #8b949e;
+}
+.nav-tab.active {
+    border-bottom: 2px solid #58a6ff;
+    color: #58a6ff;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #161b22;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.search-bar input {
+    background: none;
+    border: none;
+    color: #c9d1d9;
+    flex: 1;
+    padding: 5px;
+    font-size: 14px;
+}
+.search-bar i {
+    color: #8b949e;
+    margin-right: 10px;
+}
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.filter-group {
+    display: flex;
+    align-items: center;
+}
+.filter-group select, .filter-group button {
+    background-color: #21262d;
+    color: #8b949e;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+.filter-group button {
+    cursor: pointer;
+}
+.claims {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 10px;
+}
+.claim {
+    border-bottom: 1px solid #30363d;
+    padding: 10px 0;
+}
+.claim:last-child {
+    border-bottom: none;
+}
+.claim h3 {
+    font-size: 16px;
+    margin: 0;
+    color: #58a6ff;
+}
+.claim p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #8b949e;
+}
+.claim .trust-score {
+    color: #58a6ff;
+    font-size: 14px;
+    margin-top: 5px;
+}
