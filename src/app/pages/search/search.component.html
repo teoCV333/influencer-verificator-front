@@ -1,36 +1,31 @@
 <div class="container">
     <div class="header">
         <a href="#">Back to Dashboard</a>
-        <h1>Research Tasks</h1>
+        <h1>Research Page</h1>
     </div>
     <div class="section">
-        <h2>Research Configuration</h2>
-        <div class="tabs">
-            <div class="tab active">Specific Influencer</div>
-        </div>
         <div class="form-group">
             <label>Time Range</label>
             <div class="tabs">
-                <div class="tab">Last Week</div>
-                <div class="tab active">Last Month</div>
-                <div class="tab">Last Year</div>
-                <div class="tab">All Time</div>
+                @for(range of dateFilters; track $index) {
+                    <div class="tab" (click)="selectRange(range)" [class.active]="range.active">{{range.title}}</div>
+                }
             </div>
         </div>
         <div class="form-group">
             <label>Influencer Name</label>
-            <input type="text" placeholder="Enter influencer name">
+            <input type="text" placeholder="Enter influencer name" [(ngModel)]="data.name">
         </div>
         <div class="form-group">
             <label>Claims to Analyze Per Influencer</label>
-            <input type="number" value="50">
+            <input type="number" value="50" [(ngModel)]="data.claims">
         </div>
         <div class="form-group">
-            <label>Products to Find Per Influencer</label>
-            <input type="number" value="10">
+            <label>Perplexity Token</label>
+            <input type="text" placeholder="token for perplexity API" [(ngModel)]="data.token">
         </div>
     </div>
     <div class="footer">
-        <button>Start Research</button>
+        <button (click)="search()">Start Research</button>
     </div>
 </div>
