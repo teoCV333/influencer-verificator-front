@@ -1,230 +1,128 @@
+
 <div class="container">
-    <div class="stats">
-        @for(stat of stats; track $index) {
-            <div class="stat">
-                <h2>
-                    {{stat.value}}
-                </h2>
-                <p>
-                    {{stat.title}}
-                </p>
+        <div *ngIf="loading" class="loading-skeleton">
+            <div class="stats">
+                <div class="stat-skeleton skeleton" *ngFor="let stat of stats">
+                </div> 
             </div>
-        } 
-    </div>
-    <div class="filters-container">
-        <div class="filters">
-            @for (category of categories; track $index) {
-                <div class="filter" [class.active] = "category.active">
-                    {{category.name}}
+            <div class="filters-container">
+                <div class="filters">
+                    @for (category of categories; track $index) {
+                        <div class="filter-skeleton skeleton">
+                        </div>
+                    }
                 </div>
-            }
+                <div class="search-input-skeleton skeleton"></div>
+            </div>
+            <div class="leaderboard-skeleton">
+                <div class="header">
+                    <h1 class="skeleton skeleton-text" style="width: 100%; height: 24px;">
+                    </h1>
+                   </div>
+                   <div class="skeleton-row">
+                    <div class="skeleton skeleton-text skeleton-cell" style="width: 50px;">
+                    </div>
+                    <div class="skeleton-cell" style="display: flex; align-items: center;">
+                     <div class="skeleton skeleton-circle">
+                     </div>
+                     <div class="skeleton skeleton-text" style="width: 100px; margin-left: 10px;">
+                     </div>
+                    </div>
+                    <div class="skeleton skeleton-text skeleton-cell" style="width: 100px;">
+                    </div>
+                    <div class="skeleton skeleton-text skeleton-cell" style="width: 100px;">
+                    </div>
+                    <div class="skeleton skeleton-text skeleton-cell" style="width: 50px;">
+                    </div>
+                    <div class="skeleton skeleton-text skeleton-cell" style="width: 100px;">
+                    </div>
+                    <div class="skeleton skeleton-text skeleton-cell" style="width: 100px;">
+                    </div>
+                   </div>
+            </div>
+
         </div>
-        <input class="search-input" placeholder="Search Influencers" type="text" />
-    </div>
-    <table class="leaderboard">
-        <thead>
-            <tr>
-                <th>
-                    RANK
-                </th>
-                <th>
-                    INFLUENCER
-                </th>
-                <th>
-                    CATEGORY
-                </th>
-                <th>
-                    TRUST SCORE
-                </th>
-                <th>
-                    TREND
-                </th>
-                <th>
-                    FOLLOWERS
-                </th>
-                <th>
-                    VERIFIED CLAIMS
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    #1
-                </td>
-                <td>
-                    <img alt="Dr. Peter Attia" src="https://placehold.co/40x40" />
-                    Dr. Peter Attia
-                </td>
-                <td>
-                    Medicine
-                </td>
-                <td>
-                    94%
-                </td>
-                <td class="trend-up">
-                    <i class="fas fa-arrow-up">
-                    </i>
-                </td>
-                <td>
-                    1.2M+
-                </td>
-                <td>
-                    203
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #2
-                </td>
-                <td>
-                    <img alt="Dr. Rhonda Patrick" src="https://placehold.co/40x40" />
-                    Dr. Rhonda Patrick
-                </td>
-                <td>
-                    Nutrition
-                </td>
-                <td>
-                    91%
-                </td>
-                <td class="trend-up">
-                    <i class="fas fa-arrow-up">
-                    </i>
-                </td>
-                <td>
-                    900K+
-                </td>
-                <td>
-                    156
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #3
-                </td>
-                <td>
-                    <img alt="Dr. Chris Palmer" src="https://placehold.co/40x40" />
-                    Dr. Chris Palmer
-                </td>
-                <td>
-                    Mental Health
-                </td>
-                <td>
-                    90%
-                </td>
-                <td class="trend-up">
-                    <i class="fas fa-arrow-up">
-                    </i>
-                </td>
-                <td>
-                    180K+
-                </td>
-                <td>
-                    75
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #4
-                </td>
-                <td>
-                    <img alt="Andrew Huberman" src="https://placehold.co/40x40" />
-                    Andrew Huberman
-                </td>
-                <td>
-                    Neuroscience
-                </td>
-                <td>
-                    89%
-                </td>
-                <td class="trend-neutral">
-                    <i class="fas fa-arrow-right">
-                    </i>
-                </td>
-                <td>
-                    2.4M+
-                </td>
-                <td>
-                    127
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #5
-                </td>
-                <td>
-                    <img alt="Dr. Dominic D'Agostino" src="https://placehold.co/40x40" />
-                    Dr. Dominic D'Agostino
-                </td>
-                <td>
-                    Nutrition
-                </td>
-                <td>
-                    88%
-                </td>
-                <td class="trend-down">
-                    <i class="fas fa-arrow-down">
-                    </i>
-                </td>
-                <td>
-                    200K+
-                </td>
-                <td>
-                    112
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #6
-                </td>
-                <td>
-                    <img alt="Dr. Gabrielle Lyon" src="https://placehold.co/40x40" />
-                    Dr. Gabrielle Lyon
-                </td>
-                <td>
-                    Medicine
-                </td>
-                <td>
-                    86%
-                </td>
-                <td class="trend-up">
-                    <i class="fas fa-arrow-up">
-                    </i>
-                </td>
-                <td>
-                    350K+
-                </td>
-                <td>
-                    84
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    #7
-                </td>
-                <td>
-                    <img alt="Dr. David Sinclair" src="https://placehold.co/40x40" />
-                    Dr. David Sinclair
-                </td>
-                <td>
-                    Longevity
-                </td>
-                <td>
-                    67%
-                </td>
-                <td class="trend-neutral">
-                    <i class="fas fa-arrow-right">
-                    </i>
-                </td>
-                <td>
-                    1.1M+
-                </td>
-                <td>
-                    145
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+        <ng-container *ngIf="!loading">
+            <div class="stats">
+                <div class="stat" *ngFor="let stat of stats">
+                    <h2>
+                        {{stat.value}}
+                    </h2>
+                    <p>
+                        {{stat.title}}
+                    </p>
+                </div>
+            </div>
+            <div class="filters-container">
+                <div class="filters">
+                    @for (category of categories; track $index) {
+                        <div class="filter" [class.active] = "category.active" (click)="filterInfluencer(category.name)">
+                            {{category.name}}
+                        </div>
+                    }
+                </div>
+                <input class="search-input" placeholder="Filter Influencers" [(ngModel)]="nameFilter" type="text" (keyup)="searchByName()"/>
+            </div>
+            <table class="leaderboard">
+                <thead>
+                    <tr>
+                        <th>
+                            RANK
+                        </th>
+                        <th>
+                            INFLUENCER
+                        </th>
+                        <th>
+                            CATEGORY
+                        </th>
+                        <th>
+                            TRUST SCORE
+                        </th>
+                        <th>
+                            TREND
+                        </th>
+                        <th>
+                            FOLLOWERS
+                        </th>
+                        <th>
+                            VERIFIED CLAIMS
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (influencer of filteredInfluencers; track $index) {
+                        <tr (click)="goToInfluencer(influencer)">
+                            <td>
+                                #{{$index + 1}}
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+                                    <img alt="influer.name" src="https://placehold.co/40x40" />
+                                {{influencer.name}}
+                                </div>
+                            </td>
+                            <td>
+                                {{influencer.contentCategories[0] | capitalize}}
+                            </td>
+                            <td>
+                                {{influencer.score/2}}%
+                            </td>
+                            <td class="trend-up">
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </td>
+                            <td>
+                                {{influencer.quantityFollowers | quantityParse}}
+                            </td>
+                            <td>
+                                {{influencer.claims.length}}
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </ng-container>
 </div>
 <a href="/search" class="search-button-fixed">
     Search Influencer

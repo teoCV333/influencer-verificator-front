@@ -1,22 +1,24 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { InfluencerService } from '../../services/influencer.service';
+import { APIResponse } from '../../model/interface/APIResponse';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ModalComponent } from '../../components/modal/modal.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, ModalComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })
-export class SearchComponent {
-
-  data = {
-    filter: 'week',
-    name: '',
-    claims: 50,
-    token: ''
-  }
-
+export class SearchComponent implements OnInit {
+  loading: boolean = false;
+  showModal: boolean = false;
+  errorMessage: string = "";
+  researchForm: FormGroup;
   dateFilters = [
     {
       id: 1,
@@ -44,13 +46,49 @@ export class SearchComponent {
     }
   ]
 
+  constructor(private fb: FormBuilder, private router: Router, private influencerService: InfluencerService) {
+    this.researchForm = this.fb.group({
+      filter: ['week'],
+      name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      claims: [50, [Validators.min(10), Validators.max(200)]],
+      token: ['', [Validators.required, Validators.minLength(50)]]
+    });
+
+  }
+
+  ngOnInit(): void {
+
+  }
+
   selectRange(range: any) {
     this.dateFilters.map((date) => date.active = false);
-    this.data.filter = range.value
+    this.researchForm.patchValue({ filter: range.value });
     range.active = true;
   }
 
-  search() {
-    console.log(this.data);
+  onSubmit() {
+    if (this.researchForm.valid) {
+      this.loading = true;
+      this.searchInfluencer(this.researchForm.value);
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  closeModal() {
+    this.showModal = false; // Set visibility to false when modal is closed
+  }
+
+  searchInfluencer(data: any) {
+    console.log(data)
+    this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
+      console.log(res);
+      this.loading = false;
+    }, (error: HttpErrorResponse) => {
+      const errorResponse = error.error;
+      this.errorMessage = errorResponse.status.message;
+      this.showModal = true;
+      this.loading = false;
+    });
   }
 }

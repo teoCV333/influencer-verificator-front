@@ -1,3 +1,5 @@
+
+
 .container {
     width: 90%;
     max-width: 1200px;
@@ -21,13 +23,16 @@
     justify-content: space-between;
     margin-bottom: 20px;
 }
-.stat {
+.stat, .stat-skeleton{
     background-color: #2a2f3a;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
     flex: 1;
     margin: 0 10px;
+}
+.stat-skeleton {
+    padding: 63px;
 }
 .stat:first-child {
     margin-left: 0;
@@ -52,23 +57,29 @@
 .filters {
     display: flex;
 }
-.filter {
+.filter, .filter-skeleton {
     background-color: #2a2f3a;
     padding: 10px 20px;
     border-radius: 20px;
     margin: 0 10px;
     cursor: pointer;
 }
+.filter-skeleton {
+    padding: 20px 40px;
+}
 .filter.active {
     background-color: #00bfa5;
 }
-.search-input {
+.search-input, .search-input-skeleton {
     background-color: #2a2f3a;
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
     color: #ffffff;
     font-size: 1em;
+}
+.search-input-skeleton {
+    padding: 20px 100px;
 }
 .search-input::placeholder {
     color: #a0a0a0;
@@ -119,6 +130,47 @@
 .search-button-fixed:hover {
     background-color: #009e8a;
 }
+
+///SKELETON
+.skeleton {
+    background-color: #2d3748;
+    border-radius: 20px;
+    animation: pulse 1.5s infinite;
+}
+.skeleton-text {
+    height: 16px;
+    margin-bottom: 10px;
+}
+.skeleton-circle {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+.skeleton-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a202c;
+}
+.skeleton-cell {
+    flex: 1;
+    margin-right: 10px;
+}
+.skeleton-cell:last-child {
+    margin-right: 0;
+}
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 @media (max-width: 768px) {
     .leaderboard {
         display: block;

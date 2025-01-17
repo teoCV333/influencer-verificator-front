@@ -12,7 +12,7 @@
     margin-bottom: 20px;
 }
 .header a {
-    color: #00d4ff;
+    color: #00bfa5;
     text-decoration: none;
 }
 .header h1 {
@@ -40,8 +40,8 @@
     cursor: pointer;
 }
 .tab.active {
-    background-color: #00d4ff;
-    color: #1b263b;
+    background-color: #00bfa5;
+    color: #ffffff;
 }
 .form-group {
     margin-bottom: 20px;
@@ -68,15 +68,23 @@
 .form-group .toggle input {
     margin-right: 10px;
 }
+.form-group div small {
+    color: red;
+}
 .footer {
     display: flex;
     justify-content: flex-end;
 }
 .footer button {
     padding: 10px 20px;
-    background-color: #00d4ff;
+    background-color: #00bfa5;
     border: none;
     border-radius: 5px;
-    color: #1b263b;
+    color: #ffffff;
     cursor: pointer;
+}
+
+.footer button:disabled {
+    background-color: #44504e;
+    cursor: default;
 }

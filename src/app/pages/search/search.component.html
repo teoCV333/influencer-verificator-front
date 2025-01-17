@@ -1,31 +1,62 @@
+@if(!loading) {
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="text-center">
+            <div class="flex justify-center items-center space-x-2 mb-4">
+                <div class="w-4 h-4 bg-gray-700 rounded-full animate-bounce"></div>
+                <div class="w-4 h-4 bg-gray-700 rounded-full animate-bounce delay-200"></div>
+                <div class="w-4 h-4 bg-gray-700 rounded-full animate-bounce delay-400"></div>
+            </div>
+            <h1 class="text-2xl font-semibold text-gray-700">Loading...</h1>
+            <p class="text-gray-500">Please wait while we load the content for you.</p>
+        </div>
+    </div>
+} @else {
 <div class="container">
     <div class="header">
         <a href="#">Back to Dashboard</a>
         <h1>Research Page</h1>
     </div>
     <div class="section">
-        <div class="form-group">
-            <label>Time Range</label>
-            <div class="tabs">
-                @for(range of dateFilters; track $index) {
+        <form [formGroup]="researchForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label>Time Range</label>
+                <div class="tabs">
+                    @for(range of dateFilters; track $index) {
                     <div class="tab" (click)="selectRange(range)" [class.active]="range.active">{{range.title}}</div>
-                }
+                    }
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label>Influencer Name</label>
-            <input type="text" placeholder="Enter influencer name" [(ngModel)]="data.name">
-        </div>
-        <div class="form-group">
-            <label>Claims to Analyze Per Influencer</label>
-            <input type="number" value="50" [(ngModel)]="data.claims">
-        </div>
-        <div class="form-group">
-            <label>Perplexity Token</label>
-            <input type="text" placeholder="token for perplexity API" [(ngModel)]="data.token">
-        </div>
+            <div class="form-group">
+                <label>Influencer Name <b style="color: red">*</b></label>
+                <input formControlName="name" type="text" placeholder="Enter influencer name">
+                <div *ngIf="researchForm.get('name')?.invalid && researchForm.get('name')?.touched">
+                    <small *ngIf="researchForm.get('name')?.errors?.['required']">Name is required.</small>
+                    <small *ngIf="researchForm.get('name')?.errors?.['minlength']">Minimum length is 5.</small>
+                    <small *ngIf="researchForm.get('name')?.errors?.['maxlength']">Maximum length is 50.</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Claims to Analyze Per Influencer</label>
+                <input formControlName="claims" type="number" value="50">
+                <div *ngIf="researchForm.get('claims')?.invalid && researchForm.get('claims')?.touched">
+                    <small *ngIf="researchForm.get('claims')?.errors?.['max']">Maximum value is 200.</small>
+                    <small *ngIf="researchForm.get('claims')?.errors?.['min']">Minimum value is 10</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Perplexity Token <b style="color: red">*</b></label>
+                <input formControlName="token" type="text" placeholder="token for perplexity API">
+                <div *ngIf="researchForm.get('token')?.invalid && researchForm.get('token')?.touched">
+                    <small *ngIf="researchForm.get('token')?.errors?.['required']">Token is required.</small>
+                    <small *ngIf="researchForm.get('token')?.errors?.['minlength']">Invalid token length.</small>
+                </div>
+            </div>
+            <div class="footer">
+                <button type="submit" [disabled]="researchForm.invalid">Start Research</button>
+            </div>
+        </form>
     </div>
-    <div class="footer">
-        <button (click)="search()">Start Research</button>
-    </div>
+    <app-modal [isVisible]="showModal" [message]="errorMessage" (closeModal)="closeModal()" />
 </div>
+
+}
