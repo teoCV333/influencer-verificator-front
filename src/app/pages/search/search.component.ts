@@ -79,13 +79,14 @@ export class SearchComponent implements OnInit {
   }
 
   searchInfluencer(data: any) {
-    console.log(data)
-    this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
+    const influencer = this.influencerService.searchInfluencer(data);
+    console.log(influencer)
+   /*  this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
       this.router.navigate(["/profile", res.data.name], {state: { influencer: res.data}})
     }, (error: HttpErrorResponse) => {
       const errorResponse = error.error;
       this.errorMessage = errorResponse.status.message;
       this.showModal = true;
-    });
+    }); */
   }
 }

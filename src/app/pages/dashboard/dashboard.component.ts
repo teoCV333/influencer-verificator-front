@@ -18,14 +18,12 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   influencerService = inject(InfluencerService);
-  influencers: Influencer[] = [];
-  filteredInfluencers: Influencer[] = [];
+  router = inject(Router);
+
+  influencers = this.influencerService.influencers;
+  filteredInfluencers = this.influencers();
   nameFilter: string = "";
-  loading: boolean = true;
-
-
-  constructor(private router: Router) {}
-
+  loading = this.influencerService.loading
 
   stats = [
     {
@@ -67,21 +65,16 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.influencerService.getAllInfluencers().subscribe((res: APIResponse) => {
-      this.influencers = res.data;
-      this.filteredInfluencers = this.influencers;
-      this.calculateStats();
-      this.loading = false;
-    })
+    this.calculateStats();
   }
 
   filterInfluencer(category?: string): void {
     if (category) {
       this.nameFilter = "";
       if (category === 'All') {
-        this.filteredInfluencers = this.influencers; // Show all if 'All' is selected
+        this.filteredInfluencers = this.influencers(); // Show all if 'All' is selected
       } else {
-        this.filteredInfluencers = this.influencers.filter(influencer =>
+        this.filteredInfluencers = this.influencers().filter(influencer =>
           influencer.contentCategories.map(cat => cat.toLowerCase()).includes(category.toLowerCase())
         );
         console.log(this.filteredInfluencers)
@@ -92,18 +85,18 @@ export class DashboardComponent implements OnInit {
 
   searchByName() {
     this.categories.forEach(cat => cat.active = cat.name === 'All' );
-    this.filteredInfluencers = this.influencers.filter((influencer) => influencer.name.toLowerCase().includes(this.nameFilter.toLocaleLowerCase()));
+    this.filteredInfluencers = this.influencers().filter((influencer) => influencer.name.toLowerCase().includes(this.nameFilter.toLocaleLowerCase()));
     if (!this.nameFilter) {
-      this.filteredInfluencers = this.influencers;
+      this.filteredInfluencers = this.influencers();
     }
   }
 
   calculateStats(): void {
-    const totalInfluencers = this.influencers.length;
+    const totalInfluencers = this.influencers().length;
 
-    const totalClaims = this.influencers.reduce((acc, influencer) => acc + influencer.claims.length, 0);
+    const totalClaims = this.influencers().reduce((acc, influencer) => acc + influencer.claims.length, 0);
 
-    const totalScore = this.influencers.reduce((acc, influencer) => acc + influencer.score, 0);
+    const totalScore = this.influencers().reduce((acc, influencer) => acc + influencer.score, 0);
     const averageTrustScore = totalInfluencers > 0 ? (totalScore / totalInfluencers) / 2 : 0;
 
     this.stats[0].value = totalInfluencers; // Active Influencers

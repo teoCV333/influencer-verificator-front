@@ -1,6 +1,6 @@
 
 <div class="container">
-        <div *ngIf="loading" class="loading-skeleton">
+        <div *ngIf="loading()" class="loading-skeleton">
             <div class="stats">
                 <div class="stat-skeleton skeleton" *ngFor="let stat of stats">
                 </div> 
@@ -43,7 +43,7 @@
 
         </div>
 
-        <ng-container *ngIf="!loading">
+        <ng-container *ngIf="!loading()">
             <div class="stats">
                 <div class="stat" *ngFor="let stat of stats">
                     <h2>
