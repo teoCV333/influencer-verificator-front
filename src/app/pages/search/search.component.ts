@@ -6,17 +6,16 @@ import { InfluencerService } from '../../services/influencer.service';
 import { APIResponse } from '../../model/interface/APIResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ModalComponent } from '../../components/modal/modal.component';
-import { SpinnerComponent } from '../../components/spinner/spinner.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ModalComponent, SpinnerComponent],
+  imports: [ReactiveFormsModule, CommonModule, ModalComponent, NgxUiLoaderModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })
 export class SearchComponent implements OnInit {
-  loading: boolean = false;
   showModal: boolean = false;
   errorMessage: string = "";
   researchForm: FormGroup;
@@ -69,7 +68,6 @@ export class SearchComponent implements OnInit {
 
   onSubmit() {
     if (this.researchForm.valid) {
-      this.loading = true;
       this.searchInfluencer(this.researchForm.value);
     } else {
       console.log('Form is invalid');
@@ -83,13 +81,11 @@ export class SearchComponent implements OnInit {
   searchInfluencer(data: any) {
     console.log(data)
     this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
-      this.loading = false;
       this.router.navigate(["/profile", res.data.name], {state: { influencer: res.data}})
     }, (error: HttpErrorResponse) => {
       const errorResponse = error.error;
       this.errorMessage = errorResponse.status.message;
       this.showModal = true;
-      this.loading = false;
     });
   }
 }

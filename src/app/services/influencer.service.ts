@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { APIResponse } from '../model/interface/APIResponse';
+import { Influencer } from '../model/interface/Influencer';
 
 
 @Injectable({
@@ -10,7 +11,6 @@ import { APIResponse } from '../model/interface/APIResponse';
 export class InfluencerService {
 
   constructor(private http: HttpClient) { }
-
 
   getAllInfluencers(): Observable<APIResponse> {
     return this.http.get<APIResponse>("http://localhost:3000/api/influencer");

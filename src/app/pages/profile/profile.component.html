@@ -29,28 +29,6 @@
         </div>
         <div class="stat">
             <h2>
-                $5.0M
-            </h2>
-            <p>
-                Yearly Revenue
-            </p>
-            <p>
-                Estimated earnings
-            </p>
-        </div>
-        <div class="stat">
-            <h2>
-                1
-            </h2>
-            <p>
-                Products
-            </p>
-            <p>
-                Recommended products
-            </p>
-        </div>
-        <div class="stat">
-            <h2>
                 {{influencer.quantityFollowers | quantityParse}}
             </h2>
             <p>
@@ -138,26 +116,28 @@
         </div>
     </div>
     <div class="claims">
+        <p>Showing 10 claims</p>
         <div class="claim" *ngFor="let claim of influencer.claims">
-            <h3>
-                {{claim.datePosted | date}}
-            </h3>
-            <h3>
-                {{claim.claimText}}
-            </h3>
-            <p>
-                View Source
-            </p>
-            <p>
-                Analysis: Multiple studies confirm morning light exposure affects cortisol rhythms. Timing window
-                supported by research.
-            </p>
-            <p>
-                View Research
-            </p>
-            <p class="trust-score">
-                92% Trust Score
-            </p>
+            <div class="claim-header">
+                <div class="left">
+                    <div class="status">
+                        <span [ngClass]="[claim.verificationStatus === 'Verified' ? 'verified' : 
+                        claim.verificationStatus === 'Questionable' ? 'question' : 
+                        claim.verificationStatus === 'Debunked' ? 'debunk' : '']">{{claim.verificationStatus}}</span>
+                        <span class="date">{{claim.datePosted | date}}</span>
+                    </div>
+                </div>
+                <div class="right">92%</div>
+            </div>
+            <div class="claim-body">
+                <div class="title">{{claim.claimText}}</div>
+                <a [href]="claim.postUrl" class="source">View Source <i class="fas fa-external-link-alt"></i></a>
+                <div class="analysis">
+                    <i class="fas fa-info-circle icon"></i>
+                    <div class="text">AI Analysis</div>
+                </div>
+                <div class="text">Multiple studies confirm morning light exposure affects cortisol rhythms. Timing window supported by research.</div>
+                <a href="#" class="research">View Research <i class="fas fa-external-link-alt"></i></a>
+            </div>
         </div>
-    </div>
 </div>

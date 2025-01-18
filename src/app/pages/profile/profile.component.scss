@@ -125,18 +125,75 @@
 .claim:last-child {
     border-bottom: none;
 }
-.claim h3 {
-    font-size: 16px;
-    margin: 0;
-    color: #58a6ff;
+.claim {
+    border-bottom: 1px solid #444;
+    padding: 20px 0;
 }
-.claim p {
-    margin: 5px 0 0 0;
-    font-size: 14px;
-    color: #8b949e;
+.claim-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-.claim .trust-score {
-    color: #58a6ff;
-    font-size: 14px;
-    margin-top: 5px;
+.claim-header .left {
+    display: flex;
+    align-items: center;
+}
+.claim-header .left .status {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+.claim-header .left .status .verified {
+    background-color: #2ecc71;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.claim-header .left .status .question {
+    background-color: #68726c;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.claim-header .left .status .debunk {
+    background-color: #db3b0a;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.claim-header .left .date {
+    color: #cccccc;
+}
+.claim-header .right {
+    color: #2ecc71;
+    font-size: 20px;
+}
+.claim-header .right.yellow {
+    color: #f1c40f;
+}
+.claim-body {
+    margin-top: 10px;
+}
+.claim-body .title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.claim-body .source, .claim-body .research {
+    color: #2ecc71;
+    display: block;
+    margin-bottom: 5px;
+}
+.claim-body .analysis {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.claim-body .analysis .icon {
+    margin-right: 10px;
+}
+.claim-body .analysis .text {
+    color: #cccccc;
 }
