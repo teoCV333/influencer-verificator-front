@@ -6,11 +6,12 @@ import { InfluencerService } from '../../services/influencer.service';
 import { APIResponse } from '../../model/interface/APIResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ModalComponent } from '../../components/modal/modal.component';
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ModalComponent],
+  imports: [ReactiveFormsModule, CommonModule, ModalComponent, SpinnerComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })
@@ -82,8 +83,8 @@ export class SearchComponent implements OnInit {
   searchInfluencer(data: any) {
     console.log(data)
     this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
-      console.log(res);
       this.loading = false;
+      this.router.navigate(["/profile", res.data.name], {state: { influencer: res.data}})
     }, (error: HttpErrorResponse) => {
       const errorResponse = error.error;
       this.errorMessage = errorResponse.status.message;

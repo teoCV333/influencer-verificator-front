@@ -1,15 +1,5 @@
-@if(!loading) {
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
-        <div class="text-center">
-            <div class="flex justify-center items-center space-x-2 mb-4">
-                <div class="w-4 h-4 bg-gray-700 rounded-full animate-bounce"></div>
-                <div class="w-4 h-4 bg-gray-700 rounded-full animate-bounce delay-200"></div>
-                <div class="w-4 h-4 bg-gray-700 rounded-full animate-bounce delay-400"></div>
-            </div>
-            <h1 class="text-2xl font-semibold text-gray-700">Loading...</h1>
-            <p class="text-gray-500">Please wait while we load the content for you.</p>
-        </div>
-    </div>
+@if(loading) {
+    <app-spinner/>
 } @else {
 <div class="container">
     <div class="header">

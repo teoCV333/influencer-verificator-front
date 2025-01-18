@@ -3,52 +3,28 @@
         <img alt="Profile picture of Andrew Huberman" src="https://placehold.co/80x80" />
         <div>
             <h1>
-                Andrew Huberman
+                {{influencer.name}}
             </h1>
             <p>
-                Stanford Professor of Neurobiology and Ophthalmology, focusing on neural development, brain plasticity,
-                and neural regeneration. Host of the Huberman Lab Podcast, translating neuroscience into practical tools
-                for everyday life. Known for evidence-based approaches to performance, sleep, stress management, and
-                brain optimization.
+                {{influencer.description}}
             </p>
         </div>
     </div>
     <div class="tags">
-        <div class="tag">
-            Neuroscience
-        </div>
-        <div class="tag">
-            Sleep
-        </div>
-        <div class="tag">
-            Performance
-        </div>
-        <div class="tag">
-            Hormones
-        </div>
-        <div class="tag">
-            Stress Management
-        </div>
-        <div class="tag">
-            Exercise Science
-        </div>
-        <div class="tag">
-            Light Exposure
-        </div>
-        <div class="tag">
-            Circadian Biology
+        <div class="tag" *ngFor="let category of influencer.contentCategories">
+            {{category}}
         </div>
     </div>
     <div class="stats">
         <div class="stat">
             <h2>
-                89%
+                {{influencer.score/2}}%
             </h2>
             <p>
                 Trust Score
             </p>
             <p>
-                Based on 127 verified claims
+                Based on {{influencer.claims.length}} verified claims
             </p>
         </div>
         <div class="stat">
@@ -75,7 +51,7 @@
         </div>
         <div class="stat">
             <h2>
-                4.2M+
+                {{influencer.quantityFollowers | quantityParse}}
             </h2>
             <p>
                 Followers
@@ -88,12 +64,6 @@
     <div class="nav-tabs">
         <div class="nav-tab active">
             Claims Analysis
-        </div>
-        <div class="nav-tab">
-            Recommended Products
-        </div>
-        <div class="nav-tab">
-            Monetization
         </div>
     </div>
     <div class="search-bar">
@@ -168,12 +138,12 @@
         </div>
     </div>
     <div class="claims">
-        <div class="claim">
+        <div class="claim" *ngFor="let claim of influencer.claims">
             <h3>
-                14/11/2021
+                {{claim.datePosted | date}}
             </h3>
             <h3>
-                Viewing sunlight within 30-60 minutes of waking enhances cortisol release
+                {{claim.claimText}}
             </h3>
             <p>
                 View Source
@@ -187,27 +157,6 @@
             </p>
             <p class="trust-score">
                 92% Trust Score
-            </p>
-        </div>
-        <div class="claim">
-            <h3>
-                12/11/2021
-            </h3>
-            <h3>
-                Non-sleep deep rest (NSDR) protocols can accelerate learning and recovery
-            </h3>
-            <p>
-                View Source
-            </p>
-            <p>
-                Analysis: Multiple studies confirm morning light exposure affects cortisol rhythms. Timing window
-                supported by research.
-            </p>
-            <p>
-                View Research
-            </p>
-            <p class="trust-score">
-                88% Trust Score
             </p>
         </div>
     </div>
