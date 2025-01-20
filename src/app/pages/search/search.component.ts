@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InfluencerService } from '../../services/influencer.service';
-import { APIResponse } from '../../model/interface/APIResponse';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { APIResponse } from '../../model/interface/APIResponse';
 
 @Component({
   selector: 'app-search',
@@ -16,8 +15,8 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
   styleUrl: './search.component.scss'
 })
 export class SearchComponent implements OnInit {
-  showModal: boolean = false;
-  errorMessage: string = "";
+  influencerService = inject(InfluencerService);
+  errorMessage = this.influencerService.errorMessage;
   researchForm: FormGroup;
   dateFilters = [
     {
@@ -46,7 +45,7 @@ export class SearchComponent implements OnInit {
     }
   ]
 
-  constructor(private fb: FormBuilder, private router: Router, private influencerService: InfluencerService) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.researchForm = this.fb.group({
       filter: ['week'],
       name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
@@ -75,18 +74,15 @@ export class SearchComponent implements OnInit {
   }
 
   closeModal() {
-    this.showModal = false; // Set visibility to false when modal is closed
+    this.influencerService.showModal.set(false); // Set visibility to false when modal is closed
   }
 
   searchInfluencer(data: any) {
-    const influencer = this.influencerService.searchInfluencer(data);
-    console.log(influencer)
-   /*  this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
-      this.router.navigate(["/profile", res.data.name], {state: { influencer: res.data}})
-    }, (error: HttpErrorResponse) => {
-      const errorResponse = error.error;
-      this.errorMessage = errorResponse.status.message;
-      this.showModal = true;
-    }); */
+    ///PARAM ERROR, analize the logic and fix
+    this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
+      const newInfluencer = res.data;
+      console.log(res)
+      this.router.navigate(['/profile', newInfluencer._id]);
+    })
   }
 }

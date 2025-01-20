@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-modal',
@@ -9,12 +10,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './modal.component.scss'
 })
 export class ModalComponent {
-  @Input() isVisible: boolean = false;
-  @Input() message: string = '';
-  @Output() closeModal = new EventEmitter<void>();
-  
-  close() {
-    this.isVisible = false;
-    this.closeModal.emit();
+  modalService = inject(ModalService);
+  isVisible = this.modalService.showModal;
+  message = this.modalService.message;
+
+  constructor() {
+    console.log(this.isVisible)
   }
+
 }

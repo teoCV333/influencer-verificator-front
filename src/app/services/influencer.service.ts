@@ -9,10 +9,12 @@ import { Influencer } from '../model/interface/Influencer';
   providedIn: 'root'
 })
 export class InfluencerService {
-  
+
   private apiUrl = 'http://localhost:3000/api';
   influencers = signal<Influencer[]>([]);
   loading = signal<boolean>(true);
+  showModal = signal<boolean>(false);
+  errorMessage = signal<string>("");
 
   constructor(private http: HttpClient) {
     this.loadInfluencers();
@@ -20,34 +22,24 @@ export class InfluencerService {
 
   private loadInfluencers() {
     const cachedData = localStorage.getItem('influencers');
-    if(!cachedData) {
-      this.getAllInfluencers().subscribe((res) => {
-        this.influencers.set(res.data);
-        localStorage.setItem('influencers', JSON.stringify(res.data));
-        this.loading.set(false);
+    if (!cachedData) {
+      this.getAllInfluencers().subscribe({
+        next: (res) => {
+          this.influencers.set(res.data);
+          localStorage.setItem('influencers', JSON.stringify(res.data));
+          this.loading.set(false);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error loading influencers:', error);
+          this.loading.set(false); // Ensure loading is set to false on error
+        }
       });
-    }
-    else {
+    } else {
       this.loading.set(false);
       this.influencers.set(JSON.parse(cachedData));
     }
   }
 
-  searchInfluencer(data: any) {
-    const existentInfluencer = this.findCoincidences(data.name);
-    if(!existentInfluencer) {
-      console.log("not exist")
-      return;
-    }
-    console.log(existentInfluencer)
-    return existentInfluencer
-  }
-
-  findCoincidences(inputName: string) {
-    const normalizedName = inputName.replace(/^Dr\. /i, '').toLowerCase().trim();
-    console.log(normalizedName)
-    return this.influencers().filter(influencer => influencer.name.toLowerCase().includes(normalizedName))[0];
-  }
 
   clearCache() {
     localStorage.removeItem('influencers');
@@ -63,14 +55,14 @@ export class InfluencerService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}` // Assuming token is a Bearer token
     });
-      const result = this.http.get<APIResponse>(`http://localhost:3000/api/influencer/${name}`, {
-        headers,
-        params: {
-          filter: filter,
-          claimsNumber: claims.toString()
-        }
-      });      
-      return result;
+    const result = this.http.get<APIResponse>(`http://localhost:3000/api/influencer/${name}`, {
+      headers,
+      params: {
+        filter: filter,
+        claimsNumber: claims.toString()
+      }
+    });
+    return result;
   }
 
   searchNewClaims(): Observable<APIResponse> {

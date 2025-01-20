@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { InfluencerService } from '../../services/influencer.service';
-import { APIResponse } from '../../model/interface/APIResponse';
 import { Influencer } from '../../model/interface/Influencer';
 import { CapitalizePipe } from "../../pipes/capitalize.pipe";
 import { QuantityParsePipe } from "../../pipes/quantity-parse.pipe";
@@ -21,7 +20,6 @@ export class DashboardComponent implements OnInit {
   router = inject(Router);
 
   influencers = this.influencerService.influencers;
-  filteredInfluencers = this.influencers();
   nameFilter: string = "";
   loading = this.influencerService.loading
 
@@ -63,40 +61,57 @@ export class DashboardComponent implements OnInit {
     },
   ]
 
-
   ngOnInit(): void {
-    this.calculateStats();
+      this.calculateStats(); // Recalculate stats if needed
   }
+
+  get filteredInfluencers(): Influencer[] {
+    const influencers = this.influencerService.influencers();
+    
+    // If no filter is applied, return all influencers
+    if (this.nameFilter === "" && this.categories.some(cat => cat.active && cat.name === "All")) {
+      return [...influencers];
+    }
+
+    // Filter by category
+    const filteredByCategory = this.categories.some(cat => cat.active && cat.name !== 'All')
+      ? influencers.filter(influencer =>
+          influencer.contentCategories.map(cat => cat.toLowerCase()).includes(this.categories.find(cat => cat.active)?.name?.toLowerCase() || '')
+        )
+      : influencers;
+
+    // Filter by name
+    return filteredByCategory.filter(influencer =>
+      influencer.name.toLowerCase().includes(this.nameFilter.toLowerCase())
+    );
+  }
+
 
   filterInfluencer(category?: string): void {
     if (category) {
-      this.nameFilter = "";
-      if (category === 'All') {
-        this.filteredInfluencers = this.influencers(); // Show all if 'All' is selected
-      } else {
-        this.filteredInfluencers = this.influencers().filter(influencer =>
-          influencer.contentCategories.map(cat => cat.toLowerCase()).includes(category.toLowerCase())
-        );
-        console.log(this.filteredInfluencers)
-      }
+      this.nameFilter = ""; // Reset name filter when filtering by category
       this.categories.forEach(cat => cat.active = cat.name === category);
+      this.calculateStats(); // Recalculate stats after filtering
     }
   }
 
-  searchByName() {
-    this.categories.forEach(cat => cat.active = cat.name === 'All' );
-    this.filteredInfluencers = this.influencers().filter((influencer) => influencer.name.toLowerCase().includes(this.nameFilter.toLocaleLowerCase()));
-    if (!this.nameFilter) {
-      this.filteredInfluencers = this.influencers();
-    }
+  searchByName(): void {
+    this.categories.forEach(cat => cat.active = false); // Reset category selection
+    this.calculateStats(); // Recalculate stats after searching
   }
 
   calculateStats(): void {
     const totalInfluencers = this.influencers().length;
-
-    const totalClaims = this.influencers().reduce((acc, influencer) => acc + influencer.claims.length, 0);
+    console.log(this.influencers().length)
+    const totalClaims = this.influencers().reduce((acc, influencer) => {
+      console.log(acc);
+      console.log(influencer)
+      
+      return acc + influencer.claims.length;
+    }, 0);
 
     const totalScore = this.influencers().reduce((acc, influencer) => acc + influencer.score, 0);
+    
     const averageTrustScore = totalInfluencers > 0 ? (totalScore / totalInfluencers) / 2 : 0;
 
     this.stats[0].value = totalInfluencers; // Active Influencers
@@ -105,7 +120,6 @@ export class DashboardComponent implements OnInit {
   }
 
   goToInfluencer(influencer: Influencer): void { 
-    this.router.navigate(['/profile', influencer.name]);
+    this.router.navigate(['/profile', influencer._id]);
   }
- 
 }

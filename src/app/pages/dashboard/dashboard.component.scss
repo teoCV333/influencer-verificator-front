@@ -101,12 +101,12 @@
 .leaderboard tr:nth-child(odd) {
     background-color: #1f2430;
 }
-.leaderboard img {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+.leaderboard i.fas.fa-user-circle.user-icon {
+    font-size: 2rem;
+    padding: 5px;
+    margin-right: 9px;
 }
+
 .leaderboard .trend-up {
     color: #00bfa5;
 }
@@ -129,6 +129,13 @@
 }
 .search-button-fixed:hover {
     background-color: #009e8a;
+}
+
+.no-records {
+    font-size: 21px;
+    text-align: center;
+    padding: 15px;
+    background-color: #1f2430;
 }
 
 ///SKELETON
