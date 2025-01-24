@@ -3,5 +3,5 @@ export interface APIResponse {
         code: number;
         message: string;
     };
-    data: any;
+    data: {} | any;
 }

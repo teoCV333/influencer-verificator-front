@@ -1,0 +1,39 @@
+.container {
+    display: block; /* Show the modal */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(150 155 150 / 40%); /* Black w/ opacity */
+    text-align: center;
+}
+
+.container .success-content, .error-content {
+    position: relative;
+    top: calc(50% - 5rem);
+}
+
+.success-content span, .error-content span {
+    font-size: 2rem;
+}
+
+.error-content button {
+    width: 10%;
+    background-color: #00bfa5;
+    border-radius: 6px;
+}
+
+.fas.fa-check-circle, .fas.fa-exclamation-circle {
+    font-size: 6rem;
+}
+
+.fas.fa-check-circle {
+    color: #5cb85c;
+}
+
+.fas.fa-exclamation-circle {
+    color: #FFB302;
+}

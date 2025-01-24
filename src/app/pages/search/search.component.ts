@@ -1,22 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { InfluencerService } from '../../services/influencer.service';
-import { ModalComponent } from '../../components/modal/modal.component';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { InfluencerService } from '../../services/influencer/influencer.service';
+import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 import { APIResponse } from '../../model/interface/APIResponse';
+import { SuccessPageComponent } from '../../components/success-page/success-page.component';
+import { ResponseHandlerService } from '../../services/responseHandler/responseHandler.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ModalComponent, NgxUiLoaderModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxUiLoaderModule, SuccessPageComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
   influencerService = inject(InfluencerService);
-  errorMessage = this.influencerService.errorMessage;
+  responseHandlerService = inject(ResponseHandlerService);
+  ngxUILoaderService = inject(NgxUiLoaderService)
+  submitted = false;
   researchForm: FormGroup;
   dateFilters = [
     {
@@ -55,10 +59,6 @@ export class SearchComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-
-  }
-
   selectRange(range: any) {
     this.dateFilters.map((date) => date.active = false);
     this.researchForm.patchValue({ filter: range.value });
@@ -66,23 +66,36 @@ export class SearchComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.researchForm.valid) {
-      this.searchInfluencer(this.researchForm.value);
-    } else {
-      console.log('Form is invalid');
-    }
-  }
-
-  closeModal() {
-    this.influencerService.showModal.set(false); // Set visibility to false when modal is closed
+    this.submitted = true;
+    this.ngxUILoaderService.start();
+    this.searchInfluencer(this.researchForm.value);
   }
 
   searchInfluencer(data: any) {
-    ///PARAM ERROR, analize the logic and fix
-    this.influencerService.getInfluencerByName(data).subscribe((res: APIResponse) => {
-      const newInfluencer = res.data;
-      console.log(res)
-      this.router.navigate(['/profile', newInfluencer._id]);
-    })
+    this.influencerService.getInfluencerByName(data).subscribe(
+      {
+        next: (res: APIResponse) => {
+          console.log(res)
+          const newInfluencer = !res.data.data ? res.data : res.data;
+          this.influencerService.addInfluencer(newInfluencer);
+          this.ngxUILoaderService.stop();
+          this.responseHandlerService.success.set(true);
+          setTimeout(() => {
+            this.router.navigate(['/profile', newInfluencer._id]);
+          },2000)
+        },
+        error: async (error: HttpErrorResponse) => {
+          this.ngxUILoaderService.stop();
+          let message = 'Internal Error';
+          console.log(error.status)
+          if(error.status === 401) message = "Invalid Token";
+          if(error.status === 404) message = "Influencer Not Found";
+          if(error.status === 422) message = "Influencer content not found";
+          this.responseHandlerService.message.set(message);
+          this.responseHandlerService.error.set(true);
+        },
+        complete: () => {this.ngxUILoaderService.stop();}
+      }
+  ); 
   }
 }

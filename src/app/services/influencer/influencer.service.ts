@@ -1,15 +1,15 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
-import { APIResponse } from '../model/interface/APIResponse';
-import { Influencer } from '../model/interface/Influencer';
+import { catchError, finalize, Observable } from 'rxjs';
+import { APIResponse } from '../../model/interface/APIResponse';
+import { Influencer } from '../../model/interface/Influencer';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class InfluencerService {
-
   private apiUrl = 'http://localhost:3000/api';
   influencers = signal<Influencer[]>([]);
   loading = signal<boolean>(true);
@@ -22,7 +22,7 @@ export class InfluencerService {
 
   private loadInfluencers() {
     const cachedData = localStorage.getItem('influencers');
-    if (!cachedData) {
+    if (!cachedData || cachedData.length == 0) {
       this.getAllInfluencers().subscribe({
         next: (res) => {
           this.influencers.set(res.data);
@@ -37,6 +37,18 @@ export class InfluencerService {
     } else {
       this.loading.set(false);
       this.influencers.set(JSON.parse(cachedData));
+    }
+  }
+
+  
+  addInfluencer(newInfluencer: Influencer) {
+    const currentInfluencers = this.influencers();
+    console.log(this.influencers());
+    console.log(newInfluencer);
+    const existentInfluencer = this.influencers().some(influencer => influencer._id === newInfluencer._id);
+    if (!existentInfluencer && newInfluencer) {
+      this.influencers.update(() => [...currentInfluencers, newInfluencer]);
+      localStorage.setItem('influencers', JSON.stringify(this.influencers()));
     }
   }
 
@@ -55,14 +67,13 @@ export class InfluencerService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}` // Assuming token is a Bearer token
     });
-    const result = this.http.get<APIResponse>(`http://localhost:3000/api/influencer/${name}`, {
+    return this.http.get<APIResponse>(`http://localhost:3000/api/influencer/${name}`, {
       headers,
       params: {
         filter: filter,
         claimsNumber: claims.toString()
       }
     });
-    return result;
   }
 
   searchNewClaims(): Observable<APIResponse> {

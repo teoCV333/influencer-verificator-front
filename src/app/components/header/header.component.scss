@@ -4,11 +4,59 @@
     margin-top: 12px;
     padding: 12px;
 }
+
 .header h1 {
     font-size: 2em;
     margin: 0;
 }
+
 .header p {
     font-size: 1em;
     color: #a0a0a0;
+}
+
+.header-content {
+    display: flex;
+}
+
+.header-content .title {
+    flex: content;
+}
+
+.menu-wrapper {
+    position: relative;
+}
+
+.menu {
+    background-color: #00bfa5;
+    border-radius: 12px;
+    z-index: 0;
+    transition: transform 0.5s ease;
+    position: fixed;
+    right: 20px;
+}
+.menu-content {
+    padding: 2px;
+    margin: 0;
+    text-decoration: none;
+    list-style-type: none;
+    text-align: center;
+}
+
+.menu-item {
+    position: relative;
+    padding: 6px;
+}
+
+.menu-item a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu-item a:hover {
+    color: grey;
+}
+
+.menu-item a.active {
+    color: grey
 }

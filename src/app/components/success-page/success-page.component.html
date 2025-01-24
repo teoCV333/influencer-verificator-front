@@ -1,0 +1,11 @@
+<div *ngIf="success() || error()" class="container">
+    <div *ngIf="success()" class="success-content">
+        <i class="fas fa-check-circle"></i> <br>
+        <span>Analysis Completed</span>
+    </div>
+    <div *ngIf="error()" class="error-content">
+           <i class="fas fa-exclamation-circle"></i> <br>
+           <span>Error: {{errorMsg()}}</span> <br>
+           <button (click)="responseHandlerService.error.set(false)">Close</button>
+    </div>
+</div>

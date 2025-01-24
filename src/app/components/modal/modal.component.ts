@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ModalService } from '../../services/modal.service';
+import { ResponseHandlerService } from '../../services/responseHandler/responseHandler.service';
 
 @Component({
   selector: 'app-modal',
@@ -10,12 +10,11 @@ import { ModalService } from '../../services/modal.service';
   styleUrl: './modal.component.scss'
 })
 export class ModalComponent {
-  modalService = inject(ModalService);
-  isVisible = this.modalService.showModal;
-  message = this.modalService.message;
+  responseHandlerService = inject(ResponseHandlerService);
+  isVisible = this.responseHandlerService.showModal;
+  message = this.responseHandlerService.message;
 
   constructor() {
-    console.log(this.isVisible)
   }
 
 }

@@ -1,28 +1,28 @@
 import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 import { catchError, finalize, throwError } from "rxjs";
-import { ModalService } from "../services/modal.service";
+import { ResponseHandlerService } from "../services/responseHandler/responseHandler.service";
 
 export const ApiInterceptor: HttpInterceptorFn = (req, next) => {
   const ngxUiLoaderService = inject(NgxUiLoaderService);
-  const modalService = inject(ModalService)
+  const responseHandlerService = inject(ResponseHandlerService)
   console.log("interceptor", req)
   ngxUiLoaderService.start();
 
-  let errorResponse: HttpErrorResponse | null = null;
-
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      errorResponse = error;
+      //responseHandlerService.message.set(error.error.status.message);
+      console.log
       return throwError(() => error);
     }),
     finalize(() => {
       ngxUiLoaderService.stop();
-      if(errorResponse) {
-        modalService.message.set(errorResponse.error.status.message)
-        modalService.showModal.set(true);
-      }
+      /* if (responseHandlerService.success() === false) {
+        responseHandlerService.error.set(true);
+      } else {
+        responseHandlerService.success.set(true);
+      } */
     })
   )
 }

@@ -1,6 +1,5 @@
 <div class="container">
     <div class="header">
-        <a href="#">Back to Dashboard</a>
         <h1>Research Page</h1>
     </div>
     <div class="section">
@@ -16,7 +15,7 @@
             <div class="form-group">
                 <label>Influencer Name <b style="color: red">*</b></label>
                 <input formControlName="name" type="text" placeholder="Enter influencer name">
-                <div *ngIf="researchForm.get('name')?.invalid && researchForm.get('name')?.touched">
+                <div *ngIf="researchForm.get('name')?.invalid && (researchForm.get('name')?.touched || submitted)">
                     <small *ngIf="researchForm.get('name')?.errors?.['required']">Name is required.</small>
                     <small *ngIf="researchForm.get('name')?.errors?.['minlength']">Minimum length is 5.</small>
                     <small *ngIf="researchForm.get('name')?.errors?.['maxlength']">Maximum length is 50.</small>
@@ -33,21 +32,22 @@
             <div class="form-group">
                 <label>Perplexity Token <b style="color: red">*</b></label>
                 <input formControlName="token" type="text" placeholder="token for perplexity API">
-                <div *ngIf="researchForm.get('token')?.invalid && researchForm.get('token')?.touched">
-                    <small *ngIf="researchForm.get('token')?.errors?.['required']">Token is required.</small>
+                <div *ngIf="researchForm.get('token')?.invalid && (researchForm.get('token')?.touched || submitted)">
+                    <small *ngIf="(researchForm.get('token')?.errors?.['required'])" >Token is required.</small>
                     <small *ngIf="researchForm.get('token')?.errors?.['minlength']">Invalid token length.</small>
                 </div>
             </div>
             <div class="footer">
-                <button type="submit" [disabled]="researchForm.invalid">Start Research</button>
+                <button type="submit" >Start Research</button>
             </div>
         </form>
     </div>
-    <app-modal/>
 </div>
+<app-success-page/>
 <ngx-ui-loader
     bgsColor="#00bfa5"
     text="Analyzing..."
     pbColor="1b263b"
     fgsType="square-jelly-box"
+    fastFadeOut="true"
 ></ngx-ui-loader>

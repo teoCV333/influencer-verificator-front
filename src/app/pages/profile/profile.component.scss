@@ -8,11 +8,10 @@
     align-items: center;
     margin-bottom: 20px;
 }
-.profile-header img {
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
+.profile-header i.fas.fa-user-circle.user-icon {
+    font-size: 4rem;
+    padding: 5px;
+    margin-right: 9px;
 }
 .profile-header h1 {
     font-size: 24px;
@@ -29,8 +28,8 @@
     margin-top: 10px;
 }
 .tag {
-    background-color: #21262d;
-    color: #8b949e;
+    background-color: #00bfa5;
+    color: #ffffff;
     padding: 5px 10px;
     border-radius: 20px;
     margin: 5px;
@@ -69,8 +68,8 @@
     color: #8b949e;
 }
 .nav-tab.active {
-    border-bottom: 2px solid #58a6ff;
-    color: #58a6ff;
+    border-bottom: 2px solid #00bfa5;
+    color: #00bfa5;
 }
 .search-bar {
     display: flex;
@@ -154,15 +153,15 @@
     background-color: #68726c;
     color: #ffffff;
     padding: 2px 8px;
-    border-radius: 5px;
-    margin-right: 5px;
+    border-radius: 6px;
+    margin-right: 6px;
 }
 .claim-header .left .status .debunk {
     background-color: #db3b0a;
     color: #ffffff;
     padding: 2px 8px;
-    border-radius: 5px;
-    margin-right: 5px;
+    border-radius: 6px;
+    margin-right: 6px;
 }
 .claim-header .left .date {
     color: #cccccc;
@@ -196,4 +195,13 @@
 }
 .claim-body .analysis .text {
     color: #cccccc;
+}
+.new-claims-btn  {
+    padding: 9px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #009e8a;
+}
+.new-claims-btn:hover {
+    background-color: #009e8a;
 }

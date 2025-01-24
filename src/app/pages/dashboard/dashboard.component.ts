@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { InfluencerService } from '../../services/influencer.service';
+import { InfluencerService } from '../../services/influencer/influencer.service';
 import { Influencer } from '../../model/interface/Influencer';
 import { CapitalizePipe } from "../../pipes/capitalize.pipe";
 import { QuantityParsePipe } from "../../pipes/quantity-parse.pipe";
