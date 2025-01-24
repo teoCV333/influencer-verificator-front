@@ -10,7 +10,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   providedIn: 'root'
 })
 export class InfluencerService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://influencer-verificator-backend.vercel.app/api';
   influencers = signal<Influencer[]>([]);
   loading = signal<boolean>(true);
   showModal = signal<boolean>(false);
@@ -40,7 +40,7 @@ export class InfluencerService {
     }
   }
 
-  
+
   addInfluencer(newInfluencer: Influencer) {
     const currentInfluencers = this.influencers();
     console.log(this.influencers());
@@ -67,7 +67,7 @@ export class InfluencerService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}` // Assuming token is a Bearer token
     });
-    return this.http.get<APIResponse>(`http://localhost:3000/api/influencer/${name}`, {
+    return this.http.get<APIResponse>(`${this.apiUrl}/influencer/${name}`, {
       headers,
       params: {
         filter: filter,
@@ -77,7 +77,7 @@ export class InfluencerService {
   }
 
   searchNewClaims(): Observable<APIResponse> {
-    return this.http.get<APIResponse>("http://localhost:3000/api/influencer");
+    return this.http.get<APIResponse>(`${this.apiUrl}/influencer`);
   }
 
 }
