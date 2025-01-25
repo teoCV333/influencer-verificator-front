@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { InfluencerService } from '../../services/influencer/influencer.service';
+import { InfluencerService } from '../../services/influencer/old-influencer.service';
 import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 import { APIResponse } from '../../model/interface/APIResponse';
 import { SuccessPageComponent } from '../../components/success-page/success-page.component';

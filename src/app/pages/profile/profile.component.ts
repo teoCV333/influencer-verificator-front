@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Influencer } from '../../model/interface/Influencer';
-import { InfluencerService } from '../../services/influencer/influencer.service';
+import { Influencer } from '../../interfaces/InfluencerResponse';
+import { InfluencerService } from '../../services/influencer/old-influencer.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { QuantityParsePipe } from "../../pipes/quantity-parse.pipe";

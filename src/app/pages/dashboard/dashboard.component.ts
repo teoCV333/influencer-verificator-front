@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { InfluencerService } from '../../services/influencer/influencer.service';
-import { Influencer } from '../../model/interface/Influencer';
+import { InfluencerService } from '../../services/influencer/old-influencer.service';
+import { Influencer } from '../../interfaces/InfluencerResponse';
 import { CapitalizePipe } from "../../pipes/capitalize.pipe";
 import { QuantityParsePipe } from "../../pipes/quantity-parse.pipe";
 import { FormsModule } from '@angular/forms';
