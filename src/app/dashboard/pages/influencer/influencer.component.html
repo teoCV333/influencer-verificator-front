@@ -5,7 +5,7 @@
   <div class="max-w-5xl mx-auto p-4">
     <div class="flex items-center space-x-4">
       <img
-        alt="Profile picture of Andrew Huberman"
+        [alt]="influencer().name"
         class="w-24 h-24 rounded-full"
         height="100"
         src="https://storage.googleapis.com/a1aa/image/eR0H9u0bxRz1X6f4FfTMa18Xe5XZfeoZUjkC3i2npyXJScICF.jpg"
@@ -63,54 +63,59 @@
         <div class="flex items-center mt-4">
           <p class="text-sm">Sort by status:</p>
           <select class="bg-gray-800 p-2 rounded-lg ml-2">
-            <option>Date</option>
+            <option *ngFor="let status of filters.status; let i = index">
+              {{ status }}
+            </option>
           </select>
           <p class="text-sm ml-2">Sort by Category:</p>
           <select class="bg-gray-800 p-2 rounded-lg ml-2">
-            <option>Date</option>
+            <option *ngFor="let category of filters.categories; let i = index">
+              {{ category }}
+            </option>
           </select>
           <!-- BUTTON TO RESEARCH NEW CLAIMS -->
           <!-- <div class="items-"><button>Reseach new claims</button></div> -->
         </div>
       </div>
       <div class="mt-6">
-        <p class="text-sm">Showing 10 claims</p>
+        <p class="text-sm">Showing {{ influencer().claims.length }} claims</p>
+        @for(claim of influencer().claims; track $index) {
         <div class="mt-4">
-          <div class="bg-gray-800 p-4 rounded-lg mb-4">
-            <p class="text-sm text-gray-400">14/11/2021</p>
+          <div class="bg-gray-800 p-3 rounded-lg mb-4">
+            <div class="p-2 pl-0">
+              <span
+                [ngClass]="[
+                  'py-1 px-2 mr-2 rounded-lg',
+                  claim.verificationStatus === 'Verified'
+                    ? 'bg-green-600'
+                    : claim.verificationStatus === 'Questionable'
+                    ? 'bg-yellow-600'
+                    : claim.verificationStatus === 'Debunked'
+                    ? 'debunk'
+                    : ''
+                ]"
+                >{{ claim.verificationStatus }}</span
+              >
+              <span class="text-sm text-gray-400">{{
+                claim.datePosted | date
+              }}</span>
+            </div>
             <p class="text-lg font-bold">
-              Viewing sunlight within 30-60 minutes of waking enhances cortisol
-              release
+              {{ claim.claimText }}
             </p>
             <a class="text-green-500 text-sm" href="#"> View Source </a>
-            <div class="mt-2">
-              <p class="text-sm">Analysis</p>
+            <div class="mt-2 ml-4">
+              <p class="text-sm font-bold">AI Analysis</p>
               <p class="text-sm text-gray-400">
                 Multiple studies confirm morning light exposure affects cortisol
                 rhythms. Timing window supported by research.
               </p>
               <a class="text-green-500 text-sm" href="#"> View Research </a>
             </div>
-            <p class="text-green-500 text-right text-lg font-bold">92%</p>
-          </div>
-          <div class="bg-gray-800 p-4 rounded-lg mb-4">
-            <p class="text-sm text-gray-400">14/11/2021</p>
-            <p class="text-lg font-bold">
-              Non-sleep deep rest (NSDR) protocols can accelerate learning and
-              recovery
-            </p>
-            <a class="text-green-500 text-sm" href="#"> View Source </a>
-            <div class="mt-2">
-              <p class="text-sm">Analysis</p>
-              <p class="text-sm text-gray-400">
-                Multiple studies confirm morning light exposure affects cortisol
-                rhythms. Timing window supported by research.
-              </p>
-              <a class="text-green-500 text-sm" href="#"> View Research </a>
-            </div>
-            <p class="text-green-500 text-right text-lg font-bold">88%</p>
+            <!-- <p class="text-green-500 text-right text-lg font-bold">92%</p> -->
           </div>
         </div>
+        }
       </div>
     </div>
   </div>

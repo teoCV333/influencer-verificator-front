@@ -4,10 +4,21 @@ import { InfluencerService } from '@services/influencer/influencer.service';
 import { TitleComponent } from '@shared/title/title.component';
 import { QuantityParsePipe } from '../../../pipes/quantity-parse.pipe';
 import { RouterLink } from '@angular/router';
+import { Influencer } from '@interfaces/InfluencerResponse';
+import { FormsModule } from '@angular/forms';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { DashboardSkeletonComponent } from '../../../shared/skeletons/dashboard-skeleton/dashboard-skeleton.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, TitleComponent, QuantityParsePipe, RouterLink],
+  imports: [
+    CommonModule,
+    TitleComponent,
+    QuantityParsePipe,
+    RouterLink,
+    FormsModule,
+    DashboardSkeletonComponent,
+  ],
   templateUrl: './leaderboard.component.html',
   styles: ``,
 })
@@ -70,11 +81,45 @@ export default class LeaderboardComponent {
     },
   ]);
 
+  public nameFilter = '';
+
   toggleCategory(index: number) {
     const updatedCategories = this.categories().map((category, i) => ({
       ...category,
       active: i === index ? !category.active : false,
     }));
     this.categories.set(updatedCategories);
+  }
+
+  get filteredInfluencers(): Influencer[] {
+    const influencers = this.influencerService.influencers();
+
+    // If no filter is applied, return all influencers
+    if (
+      this.nameFilter === '' &&
+      this.categories().some((cat) => cat.active && cat.name === 'All')
+    ) {
+      return [...influencers];
+    }
+
+    // Filter by category
+    const filteredByCategory = this.categories().some(
+      (cat) => cat.active && cat.name !== 'All'
+    )
+      ? influencers.filter((influencer) =>
+          influencer.contentCategories
+            .map((cat) => cat.toLowerCase())
+            .includes(
+              this.categories()
+                .find((cat) => cat.active)
+                ?.name?.toLowerCase() || ''
+            )
+        )
+      : influencers;
+
+    // Filter by name
+    return filteredByCategory.filter((influencer) =>
+      influencer.name.toLowerCase().includes(this.nameFilter.toLowerCase())
+    );
   }
 }
