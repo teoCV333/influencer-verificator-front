@@ -10,69 +10,57 @@
         Discover New
       </button>
     </div>
-    <div class="grid grid-cols-2 gap-3 mb-4">
+    <form [formGroup]="researchForm" (ngSubmit)="searchInfluencer()">
       <div>
         <h2 class="text-md font-semibold mb-1">Time Range</h2>
         <div class="grid grid-cols-2 gap-2">
-          <button
-            class="bg-gray-700 text-white py-1 px-2 rounded-lg hover:bg-teal-700 cursor-pointer"
-            [ngClass]="{ 'bg-teal-700': dateFilter.active }"
-            (click)="toggleDateRange(i)"
-            *ngFor="let dateFilter of dateFilters(); let i = index"
-          >
+          <button class="bg-gray-700 text-white py-1 px-2 rounded-lg hover:bg-teal-700 cursor-pointer"
+            [ngClass]="{ 'bg-teal-700': dateFilter.active }" (click)="toggleDateRange(i)"
+            *ngFor="let dateFilter of dateFilters(); let i = index">
             {{ dateFilter.title }}
           </button>
         </div>
       </div>
-      <div>
-        <h2 class="text-md font-semibold mb-1">
-          Products to Find Per Influencer
-        </h2>
-        <input
-          type="number"
-          value="10"
-          class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg mb-1"
-        />
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div>
+          <h2 class="text-md font-semibold mb-1">Influencer Name</h2>
+          <input formControlName="name" type="text" placeholder="Enter influencer name"
+            class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg" />
+          <div class="text-red-500"
+            *ngIf="researchForm.get('name')?.invalid && (researchForm.get('name')?.touched || submitted)">
+            <small *ngIf="researchForm.get('name')?.errors?.['required']">Name is required.</small>
+            <small *ngIf="researchForm.get('name')?.errors?.['minlength']">Minimum length is 5.</small>
+            <small *ngIf="researchForm.get('name')?.errors?.['maxlength']">Maximum length is 50.</small>
+          </div>
+        </div>
+        <div>
+          <h2 class="text-md font-semibold mb-1">
+            Claims to Analyze Per Influencer
+          </h2>
+          <input formControlName="claims" type="number" value="50"
+            class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg" />
+          <p class="text-xs text-gray-400 mt-1">
+            Recommended: 50-100 claims for comprehensive analysis
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-3 mb-4">
-      <div>
-        <h2 class="text-md font-semibold mb-1">Influencer Name</h2>
-        <input
-          type="text"
-          placeholder="Enter influencer name"
-          class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg"
-        />
+      <div class="mb-4">
+        <div class="mb-1">
+          <h2 class="text-md font-semibold mb-1">
+            Perplexity AI Token:
+          </h2>
+          <input formControlName="token" type="text" class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg" />
+          <div class="text-red-500"
+            *ngIf="researchForm.get('token')?.invalid && (researchForm.get('token')?.touched || submitted)">
+            <small *ngIf="(researchForm.get('token')?.errors?.['required'])">Token is required.</small>
+            <small *ngIf="researchForm.get('token')?.errors?.['minlength']">Invalid token length.</small>
+          </div>
+        </div>
+        <button class="text-teal-400">+ Add New Journal</button>
       </div>
-      <div>
-        <h2 class="text-md font-semibold mb-1">
-          Claims to Analyze Per Influencer
-        </h2>
-        <input
-          type="number"
-          value="50"
-          class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg"
-        />
-        <p class="text-xs text-gray-400 mt-1">
-          Recommended: 50-100 claims for comprehensive analysis
-        </p>
-      </div>
-    </div>
-    <div class="mb-4">
-      <h2 class="text-md font-semibold mb-1">Scientific Journals</h2>
-      <div class="grid grid-cols-2 gap-2 mb-1">
-        <button class="bg-teal-700 text-white py-1 px-2 rounded-lg">
-          PubMed Central
-        </button>
-        <button class="bg-teal-700 text-white py-1 px-2 rounded-lg">
-          Nature
-        </button>
-      </div>
-      <button class="text-teal-400">+ Add New Journal</button>
-    </div>
-    <button class="bg-teal-700 text-white py-2 px-3 rounded-lg w-full">
-      Start Research
-    </button>
+      <button type="submit" class="bg-teal-700 text-white py-2 px-3 rounded-lg w-full">
+        Start Research
+      </button>
+    </form>
   </div>
-  <app-modal />
 </div>

@@ -9,7 +9,7 @@ import { ErrorHandlerInterceptor } from './interceptors/errorHandler.interceptor
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
-      withInterceptors([ErrorHandlerInterceptor, SpinnerInterceptor])
+      withInterceptors([SpinnerInterceptor, ErrorHandlerInterceptor])
     ),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),

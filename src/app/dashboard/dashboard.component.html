@@ -1,11 +1,11 @@
 <div
-  class="flex bg-slate-100 overflow-y-auto w-screen h-screen antialiased text-slate-300 selection:bg-blue-600 selection:text-white"
->
+  class="flex bg-slate-100 overflow-y-auto w-screen h-screen antialiased text-slate-300 selection:bg-blue-600 selection:text-white">
   <div class="flex relative w-screen">
     <app-sidemenu />
     <div class="text-black px-0 mt-0 w-full bg-gray-900 overflow-y-auto">
       <router-outlet />
     </div>
   </div>
+  <app-spinner />
+  <app-response-page />
 </div>
-<app-modal />

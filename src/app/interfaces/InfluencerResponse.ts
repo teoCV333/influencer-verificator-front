@@ -1,13 +1,17 @@
-export interface InfluencersResponse {
-  success: boolean;
-  data: Influencer[];
-  message: string;
+export interface ClaimSource {
+  url: string;
+  title: string;
+  _id: string;
 }
 
-export interface InfluencerResponse {
-  success: boolean;
-  data: Influencer;
-  message: string;
+export interface Claim {
+  claimText: string;
+  datePosted: string; // Consider using Date type if converting to Date object
+  postUrl: string;
+  categories: string[];
+  verificationStatus: string;
+  sources: ClaimSource[];
+  _id: string;
 }
 
 export interface Influencer {
@@ -21,18 +25,15 @@ export interface Influencer {
   __v: number;
 }
 
-export interface Claim {
-  claimText: string;
-  datePosted: string; // Consider using Date type if converting to Date object
-  postUrl: string;
-  categories: string[];
-  verificationStatus: string;
-  sources: ClaimSource[];
-  _id: string;
+export interface InfluencersResponse {
+  success: boolean;
+  data: Influencer[];
+  message: string;
 }
 
-export interface ClaimSource {
-  url: string;
-  title: string;
-  _id: string;
+export interface InfluencerResponse {
+  success: boolean;
+  data: Influencer;
+  message: string;
 }
+

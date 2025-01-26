@@ -6,8 +6,6 @@ import { QuantityParsePipe } from '../../../pipes/quantity-parse.pipe';
 import { RouterLink } from '@angular/router';
 import { Influencer } from '@interfaces/InfluencerResponse';
 import { FormsModule } from '@angular/forms';
-import { NgxUiLoaderModule } from 'ngx-ui-loader';
-import { DashboardSkeletonComponent } from '../../../shared/skeletons/dashboard-skeleton/dashboard-skeleton.component';
 
 @Component({
   standalone: true,
@@ -51,7 +49,7 @@ export default class LeaderboardComponent {
     const totalScore = this.influencerService
       .influencers()
       .reduce((acc, influencer) => acc + influencer.score, 0);
-    initialStates[2].value = `${(totalScore / initialStates[0].value).toFixed(
+    initialStates[2].value = `${((totalScore / initialStates[0].value)/2).toFixed(
       0
     )}%`;
     return initialStates;

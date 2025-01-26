@@ -7,7 +7,7 @@
 
   // Specific settings for HTML
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.html-language-features"
   },
 
   // Additional language-specific settings can be added here

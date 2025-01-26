@@ -1,11 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import type {
   Influencer,
   InfluencerResponse,
   InfluencersResponse,
 } from '@interfaces/InfluencerResponse';
-import { ModalService } from '@services/modal/modal.service';
+import { ResponsePageService } from '@services/responsePage/responsePage.service';
 import { SpinnerService } from '@services/spinner/spinner.service';
 import { catchError, delay, finalize, map, Observable, throwError } from 'rxjs';
 
@@ -20,7 +20,7 @@ interface State {
 export class InfluencerService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api';
-  public modalService = inject(ModalService);
+  public modalService = inject(ResponsePageService);
   public spinnerService = inject(SpinnerService);
 
   #state = signal<State>({
@@ -51,8 +51,22 @@ export class InfluencerService {
     return this.http
       .get<InfluencerResponse>(`${this.apiUrl}/influencer/profile/${id}`)
       .pipe(
-        delay(0),
         map((res) => res.data)
       );
+  }
+
+  searchInfluencerByName({name, filter, claims, token}: any): Observable<Influencer> {
+    const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}` // Assuming token is a Bearer token
+        });
+    return this.http.get<InfluencerResponse>(`${this.apiUrl}/influencer/${name}`, {
+          headers,
+          params: {
+            filter: filter,
+            claimsNumber: claims.toString()
+          }
+        }).pipe(
+          map((res) => res.data)
+        );
   }
 }
