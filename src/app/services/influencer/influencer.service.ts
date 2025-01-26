@@ -1,11 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import type {
   Influencer,
   InfluencerResponse,
   InfluencersResponse,
 } from '@interfaces/InfluencerResponse';
-import { delay, map } from 'rxjs';
+import { ModalService } from '@services/modal/modal.service';
+import { SpinnerService } from '@services/spinner/spinner.service';
+import { catchError, delay, finalize, map, Observable, throwError } from 'rxjs';
 
 interface State {
   influencers: Influencer[];
@@ -18,6 +20,8 @@ interface State {
 export class InfluencerService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api';
+  public modalService = inject(ModalService);
+  public spinnerService = inject(SpinnerService);
 
   #state = signal<State>({
     loading: true,
@@ -28,18 +32,22 @@ export class InfluencerService {
   public loading = computed(() => this.#state().loading);
 
   constructor() {
-    this.http
-      .get<InfluencersResponse>(`${this.apiUrl}/influencer`)
-      .pipe(delay(1500))
-      .subscribe((res) => {
-        this.#state.set({
-          loading: false,
-          influencers: res.data,
-        });
+    this.getAllInfluencers().subscribe((data) => {
+      this.#state.set({
+        loading: false,
+        influencers: data,
       });
+    });
   }
 
-  getUserById(id: string) {
+  getAllInfluencers(): Observable<Influencer[]> {
+    return this.http.get<InfluencersResponse>(`${this.apiUrl}/influencer`).pipe(
+      delay(1500),
+      map((res) => res.data)
+    );
+  }
+
+  getInfluencerById(id: string): Observable<Influencer> {
     return this.http
       .get<InfluencerResponse>(`${this.apiUrl}/influencer/profile/${id}`)
       .pipe(

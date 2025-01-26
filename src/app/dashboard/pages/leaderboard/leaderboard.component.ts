@@ -17,7 +17,6 @@ import { DashboardSkeletonComponent } from '../../../shared/skeletons/dashboard-
     QuantityParsePipe,
     RouterLink,
     FormsModule,
-    DashboardSkeletonComponent,
   ],
   templateUrl: './leaderboard.component.html',
   styles: ``,

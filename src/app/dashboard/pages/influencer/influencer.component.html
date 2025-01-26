@@ -5,23 +5,23 @@
   <div class="max-w-5xl mx-auto p-4">
     <div class="flex items-center space-x-4">
       <img
-        [alt]="influencer().name"
+        [alt]="influencer()!.name"
         class="w-24 h-24 rounded-full"
         height="100"
         src="https://storage.googleapis.com/a1aa/image/eR0H9u0bxRz1X6f4FfTMa18Xe5XZfeoZUjkC3i2npyXJScICF.jpg"
         width="100"
       />
       <div>
-        <h1 class="text-2xl font-bold">{{ influencer().name }}</h1>
+        <h1 class="text-2xl font-bold">{{ influencer()!.name }}</h1>
         <p class="text-sm">
-          {{ influencer().description }}
+          {{ influencer()!.description }}
         </p>
       </div>
     </div>
     <div class="flex flex-wrap mt-4 space-x-2">
       <span
         class="bg-teal-500 text-white px-3 py-1 rounded-full text-sm"
-        *ngFor="let category of influencer().contentCategories"
+        *ngFor="let category of influencer()!.contentCategories"
       >
         {{ category }}
       </span>
@@ -30,16 +30,16 @@
       <div class="bg-gray-800 p-2 rounded-lg">
         <p class="text-sm">Trust Score</p>
         <p class="text-3xl font-bold">
-          {{ (influencer().score / 2).toFixed(0) }}%
+          {{ (influencer()!.score / 2).toFixed(0) }}%
         </p>
         <p class="text-xs">
-          Based on {{ influencer().claims.length }} verified claims
+          Based on {{ influencer()!.claims.length }} verified claims
         </p>
       </div>
       <div class="bg-gray-800 p-2 rounded-lg">
         <p class="text-sm">Followers</p>
         <p class="text-3xl font-bold">
-          {{ influencer().quantityFollowers | quantityParse }}
+          {{ influencer()!.quantityFollowers | quantityParse }}
         </p>
         <p class="text-xs">Total following</p>
       </div>
@@ -78,8 +78,8 @@
         </div>
       </div>
       <div class="mt-6">
-        <p class="text-sm">Showing {{ influencer().claims.length }} claims</p>
-        @for(claim of influencer().claims; track $index) {
+        <p class="text-sm">Showing {{ influencer()!.claims.length }} claims</p>
+        @for(claim of influencer()!.claims; track $index) {
         <div class="mt-4">
           <div class="bg-gray-800 p-3 rounded-lg mb-4">
             <div class="p-2 pl-0">
@@ -120,4 +120,5 @@
     </div>
   </div>
 </div>
-} @else { }
+}
+<app-spinner />

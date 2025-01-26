@@ -1,17 +1,13 @@
 export interface InfluencersResponse {
-  status: {
-    code: number;
-    message: string;
-  };
-  data: Influencer[] | any;
+  success: boolean;
+  data: Influencer[];
+  message: string;
 }
 
 export interface InfluencerResponse {
-  status: {
-    code: number;
-    message: string;
-  };
-  data: Influencer | any;
+  success: boolean;
+  data: Influencer;
+  message: string;
 }
 
 export interface Influencer {

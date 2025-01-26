@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { TitleComponent } from '@shared/title/title.component';
-import { ModalComponent } from '../../../shared/modal/modal/modal.component';
+import { ModalComponent } from '@shared/modal/modal.component';
 
 @Component({
   standalone: true,
