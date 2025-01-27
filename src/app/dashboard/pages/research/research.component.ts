@@ -1,14 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { InfluencerService } from '@services/influencer/influencer.service';
 import { ResponsePageService } from '@services/responsePage/responsePage.service';
 import { TitleComponent } from '@shared/title/title.component';
+import { filter } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, TitleComponent, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './research.component.html',
   styles: ``,
 })
@@ -46,22 +52,32 @@ export default class ResearchComponent {
   public submitted = false;
 
   constructor(private fb: FormBuilder, private router: Router) {
-      this.researchForm = this.fb.group({
-        filter: ['week'],
-        name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-        claims: [50, [Validators.min(10), Validators.max(200)]],
-        token: ['', [Validators.required, Validators.minLength(50)]]
-      });
-  
-    }
+    this.researchForm = this.fb.group({
+      filter: ['week'],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(50),
+        ],
+      ],
+      claims: [50, [Validators.min(10), Validators.max(200)]],
+      token: ['', [Validators.required, Validators.minLength(50)]],
+    });
+  }
 
   public searchInfluencer() {
-    this.submitted = true;  
-    console.log("searching", this.researchForm.value);
-    this.influenerService.searchInfluencerByName(this.researchForm.value).subscribe(data => {
-      this.responsePageService.showSuccess("Successful Research.")
-      this.router.navigate(['dashboard/influencer', data._id]);
-    });
+    this.submitted = true;
+    console.log('searching', this.researchForm.value);
+    if (this.researchForm.valid) {
+      this.influenerService
+        .searchInfluencerByName(this.researchForm.value)
+        .subscribe((data) => {
+          this.responsePageService.showSuccess('Successful Research.');
+          this.router.navigate(['dashboard/influencer', data._id]);
+        });
+    }
   }
 
   public toggleDateRange(index: number) {
@@ -69,7 +85,8 @@ export default class ResearchComponent {
       ...date,
       active: i === index ? !date.active : false,
     }));
-    this.researchForm.patchValue({ filter: updatedDateFilters.filter(filter => filter.active) });
+    const activeFilter = updatedDateFilters.filter((filter) => filter.active);
+    this.researchForm.patchValue({ filter: activeFilter });
     this.dateFilters.set(updatedDateFilters);
   }
 }

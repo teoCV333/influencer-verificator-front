@@ -83,7 +83,7 @@
   } @else {
   <!-- Stats Section -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-gray-800 p-6 rounded-lg text-center" *ngFor="let stat of stats()">
+    <div class="bg-gray-800 p-6 rounded-lg text-center shadow-md shadow-teal-500" *ngFor="let stat of stats()">
       <div class="text-3xl font-bold">{{ stat.value }}</div>
       <div class="text-gray-400">{{ stat.title }}</div>
     </div>
@@ -92,15 +92,16 @@
   <!-- Filter Section -->
   <div class="flex flex-wrap items-center mb-6">
     <button *ngFor="let category of categories(); let i = index"
-      class="bg-teal-500 text-white px-4 py-2 rounded-full mr-2 mb-2 cursor-pointer hover:bg-teal-800"
+      class="bg-teal-500 text-white px-4 py-2 rounded-full mr-2 mb-2 cursor-pointer hover:bg-teal-800 shadow-md shadow-teal-500"
       [ngClass]="{ 'bg-teal-800': category.active }" (click)="toggleCategory(i)">
       {{ category.name }}
     </button>
-    <input type="text" placeholder="Filter Influencers" class="bg-gray-800 text-white px-4 py-2 rounded-full ml-auto"
-      [(ngModel)]="nameFilter" (keyup)="(filteredInfluencers)" />
+    <input type="text" placeholder="Filter Influencers"
+      class="bg-gray-800 text-white px-4 py-2 rounded-full ml-auto shadow-md shadow-teal-500" [(ngModel)]="nameFilter"
+      (keyup)="(filteredInfluencers)" />
   </div>
   <!-- Table Section -->
-  <div class="overflow-x-auto rounded-lg bg-gray-800">
+  <div class="overflow-x-auto rounded-lg bg-gray-800  shadow-md shadow-teal-500">
     <table class="min-w-full">
       <thead>
         <tr class="text-center text-gray-400">
@@ -131,7 +132,9 @@
               {{ influencer.score / 2 | number : "1.1-1" }}%
             </td>
             <td class="py-3 px-4 text-green-500">
-              <i class="fas fa-arrow-up"></i>
+              <i *ngIf="(influencer.score/2) >= 70 " class="fas fa-arrow-up"></i>
+              <i *ngIf="(influencer.score/2) == 50" class="fas fa-arrow-right text-yellow-200"></i>
+              <i *ngIf="(influencer.score/2) <= 40" class="fas fa-arrow-down text-red-200"></i>
             </td>
             <td class="py-3 px-4">
               {{ influencer.quantityFollowers | quantityParse }}

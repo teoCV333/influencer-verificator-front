@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TitleComponent } from '../../../shared/title/title.component';
 import { switchMap } from 'rxjs';
 import { InfluencerService } from '@services/influencer/influencer.service';
 import { CommonModule } from '@angular/common';
@@ -10,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
-  imports: [TitleComponent, CommonModule, QuantityParsePipe, FormsModule],
+  imports: [CommonModule, QuantityParsePipe, FormsModule],
   templateUrl: './influencer.component.html',
   styles: ``,
 })
@@ -40,9 +39,10 @@ export default class InfluencerComponent {
       switchMap(({ id }) => this.influencerService.getInfluencerById(id))
     )
   );
+  accordionStates: boolean[] = [];
 
-  selectedCategory = "All";
-  selectedStatus = "All";
+  public selectedCategory = 'All';
+  public selectedStatus = 'All';
 
   get filteredClaims() {
     return this.influencer()?.claims.filter((claim) => {
@@ -56,5 +56,12 @@ export default class InfluencerComponent {
     });
   }
 
-  constructor() {}
+  constructor() {
+    // Initialize all accordions to closed
+    this.accordionStates = new Array(this.filteredClaims?.length).fill(false);
+  }
+
+  toggleAccordion(index: number) {
+    this.accordionStates[index] = !this.accordionStates[index];
+  }
 }
