@@ -1,4 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import type {
   Influencer,
@@ -19,7 +23,7 @@ interface State {
 })
 export class InfluencerService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://influencer-verificator-backend.vercel.app/api';
   public modalService = inject(ResponsePageService);
   public spinnerService = inject(SpinnerService);
 
@@ -50,23 +54,26 @@ export class InfluencerService {
   getInfluencerById(id: string): Observable<Influencer> {
     return this.http
       .get<InfluencerResponse>(`${this.apiUrl}/influencer/profile/${id}`)
-      .pipe(
-        map((res) => res.data)
-      );
+      .pipe(map((res) => res.data));
   }
 
-  searchInfluencerByName({name, filter, claims, token}: any): Observable<Influencer> {
+  searchInfluencerByName({
+    name,
+    filter,
+    claims,
+    token,
+  }: any): Observable<Influencer> {
     const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}` // Assuming token is a Bearer token
-        });
-    return this.http.get<InfluencerResponse>(`${this.apiUrl}/influencer/${name}`, {
-          headers,
-          params: {
-            filter: filter,
-            claimsNumber: claims.toString()
-          }
-        }).pipe(
-          map((res) => res.data)
-        );
+      Authorization: `Bearer ${token}`, // Assuming token is a Bearer token
+    });
+    return this.http
+      .get<InfluencerResponse>(`${this.apiUrl}/influencer/${name}`, {
+        headers,
+        params: {
+          filter: filter,
+          claimsNumber: claims.toString(),
+        },
+      })
+      .pipe(map((res) => res.data));
   }
 }
