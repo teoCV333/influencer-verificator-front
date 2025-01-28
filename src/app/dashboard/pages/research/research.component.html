@@ -69,7 +69,8 @@
 
       <!-- Submit Button -->
       <button type="submit"
-        class="bg-teal-700 text-white py-2 px-3 rounded-lg w-full hover:bg-green-700 shadow-sm shadow-teal-500">
+        [ngClass]="{'hover:bg-green-700': researchForm.valid, 'hover:bg-red-500': !researchForm.valid }"
+        class="bg-teal-700 text-white py-2 px-3 rounded-lg w-full shadow-sm shadow-teal-500">
         Start Research
       </button>
     </form>

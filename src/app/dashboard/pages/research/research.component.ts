@@ -74,6 +74,7 @@ export default class ResearchComponent {
       this.influenerService
         .searchInfluencerByName(this.researchForm.value)
         .subscribe((data) => {
+          console.log(data);
           this.responsePageService.showSuccess('Successful Research.');
           this.router.navigate(['dashboard/influencer', data._id]);
         });

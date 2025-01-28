@@ -9,15 +9,19 @@ import { SuccessComponent } from '@shared/icons/success/success.component';
   standalone: true,
   imports: [CommonModule, SuccessComponent, ErrorComponent],
   template: `
-    @if(responsePageService.error() == true) { 
-    <div class="fixed inset-0 flex items-center justify-center bg-gray-900">
-      <app-error [text]="responsePageService.text()"/>
+    @if(responsePageService.error() == true) {
+    <div
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 overflow-y-auto"
+    >
+      <app-error [text]="responsePageService.text()" />
     </div>
-  } @else if(responsePageService.success() == true) {
-    <div class="fixed inset-0 flex items-center justify-center bg-gray-900">
-      <app-success [text]="responsePageService.text()"/>
+    } @else if(responsePageService.success() == true) {
+    <div
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 overflow-y-auto"
+    >
+      <app-success [text]="responsePageService.text()" />
     </div>
-  }
+    }
   `,
 })
 export class ResponsePageComponent {

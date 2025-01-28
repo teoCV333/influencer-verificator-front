@@ -6,10 +6,11 @@ import { InfluencerService } from '@services/influencer/influencer.service';
 import { CommonModule } from '@angular/common';
 import { QuantityParsePipe } from '../../../pipes/quantity-parse.pipe';
 import { FormsModule } from '@angular/forms';
+import { InfoComponent } from '../../../shared/icons/info/info.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, QuantityParsePipe, FormsModule],
+  imports: [CommonModule, QuantityParsePipe, FormsModule, InfoComponent],
   templateUrl: './influencer.component.html',
   styles: ``,
 })
