@@ -1,0 +1,78 @@
+<div class="text-white font-sans w-full p-3">
+  <div class="max-w-3xl mx-auto p-4 bg-gray-800 rounded-lg shadow-lg  shadow-md shadow-teal-500">
+    <h1 class="text-xl font-semibold mb-4">Research Configuration</h1>
+
+    <!-- Button Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+      <button class="bg-teal-700 text-white py-2 px-3 rounded-lg w-full shadow-sm shadow-teal-500">
+        Specific Influencer
+      </button>
+      <button
+        class="bg-gray-700 text-white py-2 px-3 rounded-lg w-full shadow-sm shadow-teal-500 hover:bg-teal-700 cursor-pointer">
+        Discover New
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="researchForm" (ngSubmit)="searchInfluencer()">
+      <div>
+        <h2 class="text-md font-semibold mb-1">Time Range</h2>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button"
+            class="bg-gray-700 text-white py-1 px-2 rounded-lg hover:bg-teal-700 cursor-pointer shadow-sm shadow-teal-500"
+            [ngClass]="{ 'bg-teal-700': dateFilter.active }" (click)="toggleDateRange(i)"
+            *ngFor="let dateFilter of dateFilters(); let i = index">
+            {{ dateFilter.title }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Influencer Name and Claims Input -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+        <div>
+          <h2 class="text-md font-semibold mb-1">Influencer Name</h2>
+          <input formControlName="name" type="text" placeholder="Enter influencer name"
+            class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg shadow-sm shadow-teal-500" />
+          <div class="text-red-500"
+            *ngIf="researchForm.get('name')?.invalid && (researchForm.get('name')?.touched || submitted)">
+            <small *ngIf="researchForm.get('name')?.errors?.['required']">Name is required.</small>
+            <small *ngIf="researchForm.get('name')?.errors?.['minlength']">Minimum length is 5.</small>
+            <small *ngIf="researchForm.get('name')?.errors?.['maxlength']">Maximum length is 50.</small>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-md font-semibold mb-1">Claims to Analyze Per Influencer</h2>
+          <input formControlName="claims" type="number" value="50"
+            class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg shadow-sm shadow-teal-500" />
+          <p class="text-xs text-gray-400 mt-1">
+            Recommended: 50-100 claims for comprehensive analysis
+          </p>
+        </div>
+      </div>
+
+      <!-- Token Input Section -->
+      <div class="mb-4">
+        <div class="mb-1">
+          <h2 class="text-md font-semibold mb-1">Perplexity AI Token:</h2>
+          <input formControlName="token" type="text"
+            class="w-full bg-gray-700 text-white py-1 px-2 rounded-lg shadow-sm shadow-teal-500" />
+          <div class="text-red-500"
+            *ngIf="researchForm.get('token')?.invalid && (researchForm.get('token')?.touched || submitted)">
+            <small *ngIf="(researchForm.get('token')?.errors?.['required'])">Token is required.</small>
+            <small *ngIf="researchForm.get('token')?.errors?.['minlength']">Invalid token length.</small>
+          </div>
+        </div>
+
+        <!-- Add New Journal Button -->
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        [ngClass]="{'hover:bg-green-700': researchForm.valid, 'hover:bg-red-500': !researchForm.valid }"
+        class="bg-teal-700 text-white py-2 px-3 rounded-lg w-full shadow-sm shadow-teal-500">
+        Start Research
+      </button>
+    </form>
+  </div>
+</div>
