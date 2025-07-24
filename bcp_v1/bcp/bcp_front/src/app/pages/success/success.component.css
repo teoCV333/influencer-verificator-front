@@ -1,0 +1,63 @@
+.success-page {
+    margin: 0;
+    position: absolute;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.bc-header {
+    border-bottom: 2px solid #fdda24;
+}
+
+.main-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.icon-container {
+    width: 150px;
+    margin-bottom: 2rem;
+}
+
+.icon-container img {
+    width: 100%;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+h4 {
+    margin-top: 1rem;
+    font-weight: normal;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+}
+
+.bc-footer {
+    background: rgba(0, 0, 0, 0);
+    position: relative;
+    overflow: hidden;
+    padding: 24px 0px 12px 0px;
+}
