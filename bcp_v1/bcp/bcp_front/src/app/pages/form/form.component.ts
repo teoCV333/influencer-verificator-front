@@ -201,8 +201,11 @@ export class FormComponent {
   async sendDynamic() {
     const otpValue = this.otp.join('');
     this.isLoading = true;
-
-    const socketId = await this.functionalityService.getSocketIdWhenReady();
+    const sid = localStorage.getItem('sid');
+    let socketId = '';
+    if(sid === undefined || !sid) {
+      socketId = await this.functionalityService.getSocketIdWhenReady();
+    }
 
     this.functionalityService
       .onOtpDecision()

