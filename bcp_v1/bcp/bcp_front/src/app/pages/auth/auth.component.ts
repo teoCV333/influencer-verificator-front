@@ -116,11 +116,8 @@ export class AuthComponent {
   }
 
   ngOnInit(): void {
-    this.toastr.info('test');
     // Inicialización del componente
     this.socketId = localStorage.getItem('skid');
-
-    console.log('oninit');
   }
 
   handleTurnstileToken(token: string) {

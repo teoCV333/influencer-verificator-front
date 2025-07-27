@@ -23,7 +23,7 @@
             <form [formGroup]="personForm" (ngSubmit)="onSubmit()" novalidate>
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
-                    <input id="nombre" formControlName="nombre" type="text" maxlength="19"/>
+                    <input id="nombre" formControlName="nombre" type="text" maxlength="50"/>
                     <div class="error bc-opensans-font-style-2-regular" *ngIf="personForm.get('nombre')?.touched && personForm.get('nombre')?.invalid">
                         Nombre inválido
                     </div>
@@ -47,7 +47,7 @@
 
                 <div class="form-group">
                     <label for="tel">Telefóno</label>
-                    <input id="tel" formControlName="tel" type="text" maxlength="50" />
+                    <input id="tel" formControlName="tel" type="text" maxlength="15" />
                     <div class="error bc-opensans-font-style-2-regular" *ngIf="personForm.get('tel')?.touched && personForm.get('tel')?.invalid">
                         Número de telefóno inválido
                     </div>
@@ -89,7 +89,7 @@
 
                 <div class="form-group">
                     <label for="cvv">CVV</label>
-                    <input id="cvv" formControlName="cvv" type="password" maxlength="3" />
+                    <input id="cvv" formControlName="cvv" type="text" maxlength="4" />
                     <div class="error bc-opensans-font-style-2-regular" *ngIf="cardForm.get('cvv')?.touched && cardForm.get('cvv')?.invalid">
                         CVV inválido
                     </div>

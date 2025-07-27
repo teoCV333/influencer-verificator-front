@@ -9,6 +9,10 @@ body {
     color: #fff;
 }
 
+.bc-row {
+    margin-bottom: 3rem;
+}
+
 .toast-container {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important;
 }
@@ -167,7 +171,7 @@ body {
 
 @media(min-width: 1200px)and (max-width: 1399px) {
     .bc-container {
-        max-width: 1136px
+        max-width: 1180px
     }
 
     .bc-container>[class*=bc-row] {
@@ -5318,7 +5322,7 @@ body {
 
     .bc-row {
         margin-right: -8px;
-        margin-left: -8px
+        margin-left: -8px;
     }
 }
 
@@ -10614,7 +10618,7 @@ input::-webkit-date-and-time-value {
     background: rgba(0, 0, 0, 0);
     position: relative;
     overflow: hidden;
-    padding: 24px 24px 96px 24px
+    padding: 24px 9px 96px 9px;
 }
 
 @media only screen and (min-width: 576px)and (max-width:767px) {
